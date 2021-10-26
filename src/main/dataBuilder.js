@@ -17,7 +17,7 @@ export default async (data) => {
   const dailyUsl = await dailyUslList(filteredListUSl);
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, FIO, USL_OK, C_T, C_I, DR, W, PATOLOGY, S_POL, SN_POL, ORG_CODE, ORG, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
+      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, ID,
     } = item;
     let SNPOLIS = SN_POL;
     let ENP;
@@ -32,12 +32,9 @@ export default async (data) => {
     } else {
       ENP = SN_POL;
     }
-    console.log(USL_OK)
-    const final = FINAL_CODE || '0';
     const cod = item.SRV_CODE ? item.SRV_CODE : '';
     const kslp = calculateKslp(AGE, PATOLOGY, DAYS);
     const RSLT = getRslt(FINAL_CODE, USL_OK);
-    const ISHOD = getIshod(RSLT);
     const {
       ratio, ksg, ksgName, group,
     } = USL_OK === 1 ? getRatio(DDS, hospDs, cod, DAYS, hospUsl, USL_OK) : getRatio(DDS, dailyDs, cod, DAYS, dailyUsl, USL_OK);
@@ -62,13 +59,12 @@ export default async (data) => {
         acc[C_I].total = calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK);
       }
     } else {
+      const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK)
       acc[C_I] = {
         kz: ratio,
         IDNPR: `${PATIENT}_${ID}`,
-        DR,
         ENP,
         SNPOLIS,
-        W,
         AGE,
         TAL_D,
         TAL_NUM,
@@ -80,8 +76,7 @@ export default async (data) => {
         FOR_POM: 3,
         PROFIL: getProfil(group),
         RESH: 1,
-        PODR: ORG_CODE,
-        PODR_NAME: ORG,
+        KOEF_PRIV: USL_OK === 1 ? 0.52 : 0.41,
         IDCASE: `${PATIENT}_${C_I}`,
         ADR_GAR: '271c73e1-90f9-496f-a023-4c9f02800af2',
         ADR_NAME: '121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А',
@@ -89,7 +84,7 @@ export default async (data) => {
         DATE_Z_2: OUT_DATE,
         KD_Z: DAYS,
         RSLT,
-        ISHOD,
+        ISHOD: getIshod(RSLT),
         IS_PRERV: group === 235 ? getPrev(RSLT, DAYS, group) : getPrev(RSLT, DAYS),
         N_KSG: ksg,
         GR: group,
@@ -102,8 +97,13 @@ export default async (data) => {
         FINAL_CODE: final,
         FIO,
         ksgName,
-        total: calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK),
+        SRED_NFZ,
+        KOEF_SPEC,
+        KOEF_PRIV,
+        KOEF_D,
+        total: SUMV,
         C_T,
+        ...item
       };
     }
     return acc;

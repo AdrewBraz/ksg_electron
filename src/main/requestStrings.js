@@ -1,7 +1,7 @@
 export const kslpStr = `select concat('2021_', T_CODE) C_I, KIND1 DS from Z.ZI_DIAG_IB_LIST_ALL where kind in ('клинический заключительный (эпикриз)', 'клинический заключительный')`;
 
 const excel = `select 
-oms.fio, oms.patient, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org, oms.org_code, oms.final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(pol.c_t, '77', 'Москва', 'Иногород') C_T, decode(oms.org, 'Дс', 2, 1) USL_OK  from (
+oms.fio, oms.patient, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(pol.c_t, '77', 'Москва', 'Иногород') C_T, decode(oms.org, 'Дс', 2, 1) USL_OK  from (
 select
 oms.fio,
 oms.patient,

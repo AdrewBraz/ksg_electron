@@ -25,16 +25,17 @@ const abourtedRatio = (days) => {
 };
 
 const calculateKsg = (kz = 0.1, age, finalCode = 0, patology, days, condition) => {
-  const nfs = condition === 1 ? 56680.9 : 25617.30;
-  const kbs = condition === 1 ? 0.41 : 0.52;
-  const ks = kz >= 2 ? 1.4 : 0.8;
+  const SRED_NFZ = condition === 1 ? 56680.9 : 25617.30;
+  const KOEF_PRIV = condition === 1 ? 0.41 : 0.52;
+  const KOEF_SPEC = kz >= 2 ? 1.4 : 0.8;
+  const KOEF_D = 1.672;
   const kslp = calculateKslp(age, patology, days);
-  const sum = nfs * kbs * ks * kz * kslp * 1.672;
+  const SUMV = SRED_NFZ * KOEF_PRIV * KOEF_SPEC * kz * kslp * KOEF_D;
   if (finalCode !== '0') {
-    const abourtedKoeff = abourtedRatio(days);
-    return (sum * abourtedKoeff);
+    const KOEF_PRERV = abourtedRatio(days);
+    return (SUMV * abourtedKoeff);
   }
-  return sum;
+  return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, SUMV }
 };
 
 const getRatioByUsl = (cod, list, days, type) => {
