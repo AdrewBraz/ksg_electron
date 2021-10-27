@@ -17,7 +17,7 @@ export default async (data) => {
   const dailyUsl = await dailyUslList(filteredListUSl);
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, ID,
+      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, ID, FINAL_CODE
     } = item;
     let SNPOLIS = SN_POL;
     let ENP;
@@ -39,29 +39,26 @@ export default async (data) => {
       ratio, ksg, ksgName, group,
     } = USL_OK === 1 ? getRatio(DDS, hospDs, cod, DAYS, hospUsl, USL_OK) : getRatio(DDS, dailyDs, cod, DAYS, dailyUsl, USL_OK);
     if (acc[C_I]) {
-      const { kz, GR, total, PODR } = acc[C_I];
-      if(acc[C_I].C_I === '2021_30270'){
-        console.log(PODR, kz)
-      }
-      if (total >= calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK)) {
-        acc[C_I].kz = kz;
+      const { KOEF_Z, GR, total} = acc[C_I];
+      if (total >= calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)) {
+        acc[C_I].KOEF_Z = KOEF_Z;
         acc[C_I].GR = GR;
         acc[C_I].PROFIL = getProfil(GR);
         acc[C_I].PROFIL_K = getProfil(group) === 81 ? 67 : 26;
       } else {
-        acc[C_I].kz = ratio;
+        acc[C_I].KOEF_Z = ratio;
         acc[C_I].N_KSG = ksg;
         acc[C_I].GR = group;
         acc[C_I].PROFIL = getProfil(GR);
         acc[C_I].cod = cod;
         acc[C_I].ksgName = ksgName;
         acc[C_I].PROFIL_K = getProfil(group) === 81 ? 67 : 26;
-        acc[C_I].total = calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK);
+        acc[C_I].total = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK);
       }
     } else {
-      const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, final, PATOLOGY, DAYS, USL_OK)
+      const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_PRERV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
       acc[C_I] = {
-        kz: ratio,
+        KOEF_Z: ratio,
         IDNPR: `${PATIENT}_${ID}`,
         ENP,
         SNPOLIS,
@@ -94,12 +91,12 @@ export default async (data) => {
         cod,
         PATOLOGY,
         PROFIL_K: getProfil(group) === 81 ? 67 : 26,
-        FINAL_CODE: final,
-        FIO,
+        FINAL_CODE,
         ksgName,
         SRED_NFZ,
         KOEF_SPEC,
         KOEF_PRIV,
+        KOEF_PRERV,
         KOEF_D,
         total: SUMV,
         C_T,

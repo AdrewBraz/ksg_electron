@@ -27,7 +27,7 @@ export default async (data) => {
   const vmpData = await vmpController();
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, ORG_CODE, ORG, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
+      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, ORG_CODE, ORG, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
     } = item;
     const obj = vmpData.find((el) => el.ID === (item.COD).toString());
     const { GROUP, PRICE, NAME } = obj;
@@ -78,7 +78,6 @@ export default async (data) => {
       RSLT,
       ISHOD,
       IS_PRERV: 0,
-      FIO,
       PRICE,
       NAME,
       C_T,

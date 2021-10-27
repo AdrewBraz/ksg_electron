@@ -13,7 +13,7 @@ import filterData from './filterData';
 import dataBuilder from './dataBuilder';
 import excel from './excel';
 import parseKslp from './parseKslp';
-import xml from './xml';
+import xml from './rmp';
 import createXml from './xml/createXml';
 import { kslpStr, ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
 import dbfController from './dbf';

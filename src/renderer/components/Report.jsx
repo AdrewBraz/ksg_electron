@@ -14,18 +14,18 @@ const paths = {
     icon: faFileExcel,
     func: () => window.api.ffomsData('ffomsChannel', 'excel'),
   },
-  // compare: {
-  //   path: 'compare',
-  //   text: 'Сравнение ксг групп',
-  //   icon: faFileExcel,
-  //   func: () => window.api.ffomsData('compare', 'comp'),
-  // },
-  // xml: {
-  //   path: 'xml',
-  //   text: 'Выгрузка за период ФФОМС',
-  //   icon: faCode,
-  //   func: () => window.api.ffomsData('ffomsChannel', 'xml'),
-  // },
+  compare: {
+    path: 'compare',
+    text: 'Сравнение ксг групп',
+    icon: faFileExcel,
+    func: () => window.api.ffomsData('compare', 'comp'),
+  },
+  xml: {
+    path: 'xml',
+    text: 'Выгрузка за период ФФОМС',
+    icon: faCode,
+    func: () => window.api.ffomsData('ffomsChannel', 'xml'),
+  },
   dbf: {
     path: 'dbf',
     text: 'Выгрузка за период Мегаклиника',

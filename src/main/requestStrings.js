@@ -243,6 +243,7 @@ export const listOfOmsRequests = [
 ];
 
 const xml = `
+select oms.patient, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(oms.org, 'Дс', 2, 1) USL_OK, oms.tal_num, oms.tal_d from (
 select
 oms.patient,
 oms.id,
@@ -487,7 +488,7 @@ tal.talon_num as tal_num,
 tal.talon_date as tal_d
 from st.ksg_list_v oms
 inner join a.t_smh_plans tal on oms.id = tal.t_med_chrt_id
-where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь'`;
+where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь') oms`;
 
 export const ksg = `select 
 st.fio,
