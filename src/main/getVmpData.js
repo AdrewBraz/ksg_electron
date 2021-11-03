@@ -2,35 +2,35 @@ import vmpController from './controller/vmpController';
 import { getRslt, getIshod, utf8_decode } from './xml/utils';
 
 const vHmp = [{
-  GROUP: 42, VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168,
+  GROUP: 42, VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168, DZP: 0.47
 }, {
-  GROUP: 36, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21166,
+  GROUP: 36, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21166, DZP: 0.55
 }, {
-  GROUP: 37, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21166,
+  GROUP: 37, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21166, DZP: 0.48
 }, {
-  GROUP: 38, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21166,
+  GROUP: 38, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21166, DZP: 0.42
 }, {
-  GROUP: 39, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21167,
+  GROUP: 39, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21167, DZP: 0.53
 }, {
-  GROUP: 40, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21167,
+  GROUP: 40, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21167, DZP: 0.45
 }, {
-  GROUP: 41, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167,
+  GROUP: 41, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167, DZP: 0.33
 }, {
-  GROUP: 43, VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169,
+  GROUP: 43, VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17
 }, {
-  GROUP: 45, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170,
+  GROUP: 45, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.36
 }, {
-  GROUP: 46, VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171,
+  GROUP: 46, VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.51
 }];
 
 export default async (data) => {
   const vmpData = await vmpController();
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, ORG_CODE, ORG, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
+      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
     } = item;
     const obj = vmpData.find((el) => el.ID === (item.COD).toString());
-    const { GROUP, PRICE, NAME } = obj;
+    const { GROUP, PRICE, NAME, NFS } = obj;
     const hmp = vHmp.find((el) => el.GROUP === GROUP);
     let SNPOLIS; let
       ENP;
@@ -43,7 +43,7 @@ export default async (data) => {
     } else {
       ENP = SN_POL;
     }
-    const { VID_HMP, METOD_HMP, MODEL_HMP } = hmp;
+    const { VID_HMP, METOD_HMP, MODEL_HMP, DZP } = hmp;
     const RSLT = getRslt(FINAL_CODE);
     const ISHOD = getIshod(RSLT);
     acc[C_I] = {
@@ -66,9 +66,9 @@ export default async (data) => {
       VID_HMP,
       METOD_HMP,
       MODEL_HMP,
+      DZP,
+      NFZ: NFS,
       RESH_HMP: 1,
-      PODR: ORG_CODE,
-      PODR_NAME: ORG,
       IDCASE: `${PATIENT}_${C_I}`,
       ADR_GAR: '271c73e1-90f9-496f-a023-4c9f02800af2',
       ADR_NAME: utf8_decode('121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А'),
@@ -78,9 +78,10 @@ export default async (data) => {
       RSLT,
       ISHOD,
       IS_PRERV: 0,
-      PRICE,
+      SUMV: PRICE,
       NAME,
       C_T,
+      ...item
     };
     return acc;
   }, {});

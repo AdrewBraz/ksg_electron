@@ -34,7 +34,7 @@ const calculateKsg = (KOEF_Z = 0.1, age, finalCode = 0, patology, days, conditio
   const SUMV = SRED_NFZ * KOEF_PRIV * KOEF_SPEC * KOEF_Z * kslp * KOEF_D;
   if (finalCode !== '0') {
     KOEF_PRERV = abourtedRatio(days);
-    return (SUMV * KOEF_PRERV);
+    return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV: SUMV * KOEF_PRERV };
   }
   return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV }
 };
@@ -92,9 +92,6 @@ const getRatio = (dds, list, cod = '', days, uslList, type) => {
     const ksg = item.KSG;
     const ksgName = item.KSG_NAME;
     const group = item.GROUP_NUM;
-    if (group === 154) {
-      return 0;
-    }
     return {
       ratio, ksg, ksgName, group,
     };

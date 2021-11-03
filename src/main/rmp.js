@@ -85,6 +85,10 @@ export default (coll) => {
           .ele('METOD_HMP').txt(`${item.METOD_HMP}`).up()
           .ele('MODEL_HMP').txt(`${item.MODEL_HMP}`).up()
           .ele('LECH_HMP').txt(1).up()
+          .ele('DZP').txt(`${item.DZP}`).up()
+          .ele('NFZ').txt(`${item.NFZ}`).up()
+          .ele('TARIF').txt(`${item.SUMV}`).up()
+          .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
         .up()
       .up();
 
@@ -173,13 +177,9 @@ export default (coll) => {
       .ele('VIDPOM').txt(item.VIDPOM).up()
       .ele('FOR_POM').txt(item.FOR_POM).up()
       .ele('PROFIL').txt(item.PROFIL).up()
-      .ele('GR_HMP').txt(`${item.GR_HMP}`).up()
-      .ele('VID_HMP').txt(`${item.VID_HMP}`).up()
-      .ele('METOD_HMP').txt(`${item.METOD_HMP}`).up()
-      .ele('RESH_HMP').txt(1).up()
       .ele('PODR').txt(`${item.PODR}`).up()
       .ele('PODR_NAME').txt(`${item.PODR_NAME}`).up()
-      .ele('PROFIL_K').txt(67).up()
+      .ele('PROFIL_K').txt(`${item.PROFIL_K}`).up()
       .ele('TAL_P').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
     .up()
       .ele('Z_SL')
@@ -211,13 +211,17 @@ export default (coll) => {
         .ele('DS1').txt(`${item.DS1}`).up()
         .ele('KSG_KPG')
           .ele('N_KSG').txt(`${item.N_KSG}`).up()
-            .ele('GR').txt(`${item.GR}`).up()
-            .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
-            .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
-            .ele('SL_K').txt(`${item.SL_K}`).up()
-          .up()
+          .ele('GR').txt(`${item.GR}`).up()
+          .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
+          .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
+          .ele('SL_K').txt(`${item.SL_K}`).up()
+          .ele('IT_SL').txt(`${item.kslp}`).up()
         .up()
-      .up();
+        .ele('DZP').txt(1).up()
+        .ele('TARIF').txt(`${item.SUMV}`).up()
+        .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
+        .up()
+      .up()
 
     root.ele('ZAP').import(frag);
     if (cod) {
@@ -237,25 +241,71 @@ export default (coll) => {
           .ele('Z_SL').txt(kslp).up()
         .up();
       if (cod) {
-        root.last().last().last().last().prev().import(fragKSLP);
+        root.last().last().last().last().prev().prev().prev().prev().import(fragKSLP);
       } else {
-        root.last().last().last().last().import(fragKSLP);
+        root.last().last().last().last().prev().prev().prev().import(fragKSLP);
       }
     }
     if (ENP) {
       const fragPol = fragment()
         .ele('ENP').txt(`${ENP}`).up()
+        .ele('SMO_OK').txt('').up()
+        .ele('SMO').txt('').up()
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
-        .ele('NOVOR').txt(0).up();
+        .ele('NOVOR').txt(0).up()
+        .ele('FAM').txt('').up()
+        .ele('IM').txt('').up()
+        .ele('OT').txt('').up()
+        .ele('DOST').txt('').up()
+        .ele('TEL').txt('').up()
+        .ele('MR').txt('').up()
+        .ele('DOCTYPE').txt('').up()
+        .ele('DOCSER').txt('').up()
+        .ele('DOCNUM').txt('').up()
+        .ele('DOCDATE').txt('').up()
+        .ele('DOCORG').txt('').up()
+        .ele('SNILS').txt('').up()
+        .ele('OKATOG').txt('').up()
+        .ele('OKATOP').txt('').up()
+        .ele('COMENTP').txt('').up()
+        .ele('FAM_P').txt('').up()
+        .ele('IM_P').txt('').up()
+        .ele('OT_P').txt('').up()
+        .ele('W_P').txt('').up()
+        .ele('DR_P').txt('').up()
+        .ele('DOST_P').txt('').up()
       root.last().first().next().next().import(fragPol);
     }
     if (SNPOLIS) {
       const fragPol = fragment()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
+        .ele('SMO_OK').txt('').up()
+        .ele('SMO').txt('').up()
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
-        .ele('NOVOR').txt(0).up();
+        .ele('NOVOR').txt(0).up()
+        .ele('FAM').txt('').up()
+        .ele('IM').txt('').up()
+        .ele('OT').txt('').up()
+        .ele('DOST').txt('').up()
+        .ele('TEL').txt('').up()
+        .ele('MR').txt('').up()
+        .ele('DOCTYPE').txt('').up()
+        .ele('DOCSER').txt('').up()
+        .ele('DOCNUM').txt('').up()
+        .ele('DOCDATE').txt('').up()
+        .ele('DOCORG').txt('').up()
+        .ele('SNILS').txt('').up()
+        .ele('OKATOG').txt('').up()
+        .ele('OKATOP').txt('').up()
+        .ele('COMENTP').txt('').up()
+        .ele('FAM_P').txt('').up()
+        .ele('IM_P').txt('').up()
+        .ele('OT_P').txt('').up()
+        .ele('W_P').txt('').up()
+        .ele('DR_P').txt('').up()
+        .ele('DOST_P').txt('').up()
       root.last().first().next().next().import(fragPol);
     }
     if (PATOLOGY) {

@@ -19,7 +19,7 @@ export default async (data) => {
     const {
       PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, ID, FINAL_CODE
     } = item;
-    let SNPOLIS = SN_POL;
+    let SNPOLIS;
     let ENP;
     const calculateDays = Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000));
     const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
@@ -39,24 +39,23 @@ export default async (data) => {
       ratio, ksg, ksgName, group,
     } = USL_OK === 1 ? getRatio(DDS, hospDs, cod, DAYS, hospUsl, USL_OK) : getRatio(DDS, dailyDs, cod, DAYS, dailyUsl, USL_OK);
     if (acc[C_I]) {
-      const { KOEF_Z, GR, total} = acc[C_I];
-      if (total >= calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)) {
-        acc[C_I].KOEF_Z = KOEF_Z;
-        acc[C_I].GR = GR;
-        acc[C_I].PROFIL = getProfil(GR);
-        acc[C_I].PROFIL_K = getProfil(group) === 81 ? 67 : 26;
-      } else {
+      const { SUMV: total } = acc[C_I];
+      const { KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
+      if (total < SUMV) {
         acc[C_I].KOEF_Z = ratio;
+        acc[C_I].KOEF_SPEC = KOEF_SPEC;
         acc[C_I].N_KSG = ksg;
         acc[C_I].GR = group;
-        acc[C_I].PROFIL = getProfil(GR);
+        acc[C_I].PROFIL = getProfil(group);
         acc[C_I].cod = cod;
         acc[C_I].ksgName = ksgName;
         acc[C_I].PROFIL_K = getProfil(group) === 81 ? 67 : 26;
-        acc[C_I].total = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK);
+        acc[C_I].SUMV = SUMV;
+        acc[C_I].total = SUMV;
       }
     } else {
       const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_PRERV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
+      console.log(SUMV, C_I)
       acc[C_I] = {
         KOEF_Z: ratio,
         IDNPR: `${PATIENT}_${ID}`,
@@ -73,7 +72,6 @@ export default async (data) => {
         FOR_POM: 3,
         PROFIL: getProfil(group),
         RESH: 1,
-        KOEF_PRIV: USL_OK === 1 ? 0.52 : 0.41,
         IDCASE: `${PATIENT}_${C_I}`,
         ADR_GAR: '271c73e1-90f9-496f-a023-4c9f02800af2',
         ADR_NAME: '121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А',
@@ -98,7 +96,7 @@ export default async (data) => {
         KOEF_PRIV,
         KOEF_PRERV,
         KOEF_D,
-        total: SUMV,
+        SUMV,
         C_T,
         ...item
       };

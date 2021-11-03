@@ -243,7 +243,7 @@ export const listOfOmsRequests = [
 ];
 
 const xml = `
-select oms.patient, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(oms.org, 'Дс', 2, 1) USL_OK, oms.tal_num, oms.tal_d from (
+select oms.patient, oms.c_i, oms.id, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(oms.org, 'Дс', 2, 1) USL_OK, oms.tal_num, oms.tal_d from (
 select
 oms.patient,
 oms.id,
@@ -299,7 +299,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date(qu.value1,'dd.mm.yyyy') and to_date(qu.value2,'dd.mm.yyyy')
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy')
 union all
 select
 oms.patient,
@@ -356,7 +356,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date(qu.value1,'dd.mm.yyyy') and to_date(qu.value2,'dd.mm.yyyy')
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy')
 union all
 select
 oms.patient,
@@ -413,7 +413,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date(qu.value1,'dd.mm.yyyy') and to_date(qu.value2,'dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy') 
 union all
 select
 list.patient,
@@ -488,7 +488,8 @@ tal.talon_num as tal_num,
 tal.talon_date as tal_d
 from st.ksg_list_v oms
 inner join a.t_smh_plans tal on oms.id = tal.t_med_chrt_id
-where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь') oms`;
+where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь') oms where oms.dds is not null
+`;
 
 export const ksg = `select 
 st.fio,
