@@ -488,7 +488,7 @@ tal.talon_num as tal_num,
 tal.talon_date as tal_d
 from st.ksg_list_v oms
 inner join a.t_smh_plans tal on oms.id = tal.t_med_chrt_id
-where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь') oms where oms.dds is not null
+where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь' and tal.status not like '99') oms where oms.dds is not null and oms.org not like 'Дс'
 `;
 
 export const ksg = `select 

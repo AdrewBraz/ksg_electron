@@ -2,7 +2,7 @@ import { create, fragment } from 'xmlbuilder2';
 import {
   format, getMonth, getDate, lastDayOfMonth,
 } from 'date-fns';
-import { utf8_decode } from './xml/utils';
+import { utf8_decode } from './utils';
 
 function makeCounter() {
   let currentCount = 1;
@@ -183,44 +183,44 @@ export default (coll) => {
       .ele('TAL_P').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
     .up()
       .ele('Z_SL')
-      .ele('IDCASE').txt(`${item.IDCASE}`).up()
-      .ele('ADR_GAR').txt(`${item.ADR_GAR}`).up()
-      .ele('ADR_NAME').txt('121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А').up()
-      .ele('USL_OK').txt(`${item.USL_OK}`).up()
-      .ele('VIDPOM').txt(item.VIDPOM).up()
-      .ele('FOR_POM').txt(item.FOR_POM).up()
-      .ele('DATE_Z_1').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
-      .ele('DATE_Z_2').txt(format(item.DATE_Z_2, 'yyyy-MM-dd')).up()
-      .ele('KD_Z').txt(item.KD_Z).up()
-      .ele('RSLT').txt(`${item.RSLT}`).up()
-      .ele('ISHOD').txt(`${item.ISHOD}`).up()
-      .ele('IS_PRERV').txt(`${item.IS_PRERV}`).up()
-      .ele('KOEF_PRERV').txt(`${item.KOEF_PRERV}`).up()
-      .ele('KOEF_PRIV').txt(`${item.KOEF_PRIV}`).up()
-      .ele('KOEF_SPEC').txt(`${item.KOEF_SPEC}`).up()
-      .ele('KOEF_D').txt(`${item.KOEF_D}`).up()
-      .ele('SRED_NFZ').txt(`${item.SRED_NFZ}`).up()
-      .ele('SL')
-        .ele('SL_ID').txt(`${item.IDCASE}`).up()
-        .ele('PODR').txt(`${item.PODR}`).up()
-        .ele('PODR_NAME').txt(`${item.PODR_NAME}`).up()
-        .ele('PROFIL').txt(item.PROFIL).up()
-        .ele('PROFIL_K').txt(`${item.PROFIL_K}`).up()
-        .ele('NHISTORY').txt(`${item.C_I}`).up()
-        .ele('DS_GR').txt(`${item.DS1}`).up()
-        .ele('DS1').txt(`${item.DS1}`).up()
-        .ele('KSG_KPG')
-          .ele('N_KSG').txt(`${item.N_KSG}`).up()
-          .ele('GR').txt(`${item.GR}`).up()
-          .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
-          .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
-          .ele('SL_K').txt(`${item.SL_K}`).up()
-          .ele('IT_SL').txt(`${item.kslp}`).up()
+        .ele('IDCASE').txt(`${item.IDCASE}`).up()
+        .ele('ADR_GAR').txt(`${item.ADR_GAR}`).up()
+        .ele('ADR_NAME').txt('121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А').up()
+        .ele('USL_OK').txt(`${item.USL_OK}`).up()
+        .ele('VIDPOM').txt(item.VIDPOM).up()
+        .ele('FOR_POM').txt(item.FOR_POM).up()
+        .ele('DATE_Z_1').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
+        .ele('DATE_Z_2').txt(format(item.DATE_Z_2, 'yyyy-MM-dd')).up()
+        .ele('KD_Z').txt(item.KD_Z).up()
+        .ele('RSLT').txt(`${item.RSLT}`).up()
+        .ele('ISHOD').txt(`${item.ISHOD}`).up()
+        .ele('IS_PRERV').txt(`${item.IS_PRERV}`).up()
+        .ele('KOEF_PRERV').txt(`${item.KOEF_PRERV}`).up()
+        .ele('KOEF_PRIV').txt(`${item.KOEF_PRIV}`).up()
+        .ele('KOEF_SPEC').txt(`${item.KOEF_SPEC}`).up()
+        .ele('KOEF_D').txt(`${item.KOEF_D}`).up()
+        .ele('SRED_NFZ').txt(`${item.SRED_NFZ}`).up()
+        .ele('SL')
+          .ele('SL_ID').txt(`${item.IDCASE}`).up()
+          .ele('PODR').txt(`${item.PODR}`).up()
+          .ele('PODR_NAME').txt(`${item.PODR_NAME}`).up()
+          .ele('PROFIL').txt(item.PROFIL).up()
+          .ele('PROFIL_K').txt(`${item.PROFIL_K}`).up()
+          .ele('NHISTORY').txt(`${item.C_I}`).up()
+          .ele('DS_GR').txt(`${item.DS1}`).up()
+          .ele('DS1').txt(`${item.DS1}`).up()
+          .ele('KSG_KPG')
+            .ele('N_KSG').txt(`${item.N_KSG}`).up()
+            .ele('GR').txt(`${item.GR}`).up()
+            .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
+            .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
+            .ele('SL_K').txt(`${item.SL_K}`).up()
+            .ele('IT_SL').txt(`${item.kslp}`).up()
+          .up()
+          .ele('DZP').txt(1).up()
+          .ele('TARIF').txt(`${item.SUMV}`).up()
         .up()
-        .ele('DZP').txt(1).up()
-        .ele('TARIF').txt(`${item.SUMV}`).up()
-        .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
-        .up()
+        .ele('SUMV').txt(`${item.SUMV}`).up()
       .up()
 
     root.ele('ZAP').import(frag);
@@ -228,10 +228,10 @@ export default (coll) => {
       const fragUsl = fragment()
         .ele('USL')
           .ele('IDSERV').txt(`${item.IDCASE}_1`).up()
-          .ele('VID_VME').txt(`${item.cod}`)
-          .up()
-        .up();
-      root.last().last().last().import(fragUsl);
+          .ele('VID_VME').txt(`${item.cod}`).up()
+        .up()
+        .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
+      root.last().last().last().prev().import(fragUsl);
     }
     if (SL_K === 1) {
       const IDSL = kslp === 1.1 ? 1 : 8;
@@ -241,9 +241,9 @@ export default (coll) => {
           .ele('Z_SL').txt(kslp).up()
         .up();
       if (cod) {
-        root.last().last().last().last().prev().prev().prev().prev().import(fragKSLP);
+        root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
       } else {
-        root.last().last().last().last().prev().prev().prev().import(fragKSLP);
+        root.last().last().last().prev().last().prev().prev().import(fragKSLP);
       }
     }
     if (ENP) {
@@ -308,11 +308,19 @@ export default (coll) => {
         .ele('DOST_P').txt('').up()
       root.last().first().next().next().import(fragPol);
     }
-    if (PATOLOGY) {
-      const fragDS2 = fragment().ele('DS2').txt(`${PATOLOGY}`).up();
-      root.last().last().last().import(fragDS2);
-    }
+    // if (PATOLOGY) {
+    //   const fragDS2 = fragment().ele('DS2').txt(`${PATOLOGY}`).up();
+    //   root.last().last().last().import(fragDS2);
+    // }
   });
+  root
+    .ele('SIGNATURE')
+      .ele('CANONMETALG').txt('').up()
+      .ele('SIGNMETALG').txt('').up()
+      .ele('REFERENCE').txt('').up()
+      .ele('KEYINFO').txt('').up()
+      .ele('SIGN').txt('').up()
+    .up()
   const xml = root.end({ prettyPrint: true });
   return xml;
 };

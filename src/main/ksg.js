@@ -31,10 +31,10 @@ const calculateKsg = (KOEF_Z = 0.1, age, finalCode = 0, patology, days, conditio
   const KOEF_D = 1.672;
   let KOEF_PRERV = 1;
   const kslp = calculateKslp(age, patology, days);
-  const SUMV = SRED_NFZ * KOEF_PRIV * KOEF_SPEC * KOEF_Z * kslp * KOEF_D;
+  const SUMV = Math.round(((SRED_NFZ * KOEF_PRIV * KOEF_SPEC * KOEF_Z * kslp * KOEF_D) + Number.EPSILON)*100)/100;
   if (finalCode !== '0') {
     KOEF_PRERV = abourtedRatio(days);
-    return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV: SUMV * KOEF_PRERV };
+    return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV: Math.round(((SUMV * KOEF_PRERV) +  + Number.EPSILON)*100)/100};
   }
   return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV }
 };
