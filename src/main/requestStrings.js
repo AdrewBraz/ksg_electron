@@ -520,6 +520,7 @@ inner join a.t_smh_plans tal on wi.f_t_med_chrt_id = tal.t_med_chrt_id
 where wi.status like '50'`
 
 export const ffoms = {
-  xml,
+  rmp: xml,
+  doms: xml,
   excel
 };

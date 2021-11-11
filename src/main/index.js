@@ -7,15 +7,13 @@ import AdmZip from 'adm-zip';
 import mongoose from 'mongoose';
 import { uniq } from 'lodash';
 import { format } from 'date-fns';
-import getData from './getData';
-import getVmpData from './getVmpData';
-import filterData from './filterData';
-import dataBuilder from './dataBuilder';
+import getPreparedData from './getPreparedData';
 import excel from './excel';
 import parseKslp from './parseKslp';
-import xml from './rmp';
+import doms from './xml/doms';
+import rmp from './xml/rmp';
 import createXml from './xml/createXml';
-import { kslpStr, ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
+import { ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
 import dbfController from './dbf';
 import excelParser from './excelParser';
 import { medicalServList } from './utils/dbfUtils';
@@ -37,16 +35,13 @@ const db = mongoose.connection;
 
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
+    const requestString = ffoms[id];
     if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
       fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
     }
+    const { vmpList, ksgList } = await getPreparedData(db, config, )
+  }
     const requestString = ffoms[id];
-    const data = await getData(oracledb, config, requestString);
-    const kslpList = await getData(oracledb, config, kslpStr);
-    const list = await parseKslp(kslpList);
-    const { vmp, ksg } = await filterData(data, list);
-    const vmpList = await getVmpData(vmp);
-    const ksgList = await dataBuilder(ksg);
     if (id === 'excel') {
       const result = await excel(vmpList, ksgList);
       return result
@@ -54,7 +49,7 @@ const db = mongoose.connection;
     if (id === 'xml') {
       
       const zip = new AdmZip();
-      const x = await xml({ ksgList, vmpList });
+      const x = await doms({ ksgList, vmpList });
       const date = format(new Date(), 'yyMMdd');
       const xmlCreated = await createXml(x, date);
       const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС//FM990089F00${date}.xml`);
