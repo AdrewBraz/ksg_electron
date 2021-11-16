@@ -9,7 +9,7 @@ import {
 export default async (data) => {
   const dsList = uniqBy(data, 'DDS');
   const usList = uniqBy(data, 'SRV_CODE');
-  const filteredList = dsList.map((item) => item.DDS).filter((item) => item !== 'U07.1' && item !== 'U07.2');
+  const filteredList = dsList.map((item) => item.DDS);
   const filteredListUSl = usList.map((item) => item.SRV_CODE).filter((item) => !!item).map((item) => item.trim());
   const hospDs = await listDsController(filteredList);
   const hospUsl = await listUslController(filteredListUSl);
@@ -17,7 +17,7 @@ export default async (data) => {
   const dailyUsl = await dailyUslList(filteredListUSl);
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, ID, FINAL_CODE
+      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, ID, FINAL_CODE
     } = item;
     let SNPOLIS;
     let ENP;
@@ -62,8 +62,6 @@ export default async (data) => {
         ENP,
         SNPOLIS,
         AGE,
-        TAL_D,
-        TAL_NUM,
         POVOD: 3,
         C_I,
         DS1: DDS,

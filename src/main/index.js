@@ -3,16 +3,13 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
 import oracledb from 'oracledb';
 import fs from 'fs';
-import AdmZip from 'adm-zip';
 import mongoose from 'mongoose';
-import { uniq } from 'lodash';
-import { format } from 'date-fns';
 import getPreparedData from './getPreparedData';
 import excel from './excel';
-import parseKslp from './parseKslp';
 import doms from './xml/doms';
 import rmp from './xml/rmp';
-import createXml from './xml/createXml';
+import getData from './getData';
+import createZip from './createZip'
 import { ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
 import dbfController from './dbf';
 import excelParser from './excelParser';
@@ -36,38 +33,28 @@ const db = mongoose.connection;
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
     const requestString = ffoms[id];
-    if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
-      fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
+    const { vmpList, ksgList } = await getPreparedData(db, config, requestString)
+    if( requestString === 'excel'){
+      if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
+        fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
+      }
+      const result = await excel(vmpList, ksgList)
     }
-    const { vmpList, ksgList } = await getPreparedData(db, config, )
-  }
-    const requestString = ffoms[id];
-    if (id === 'excel') {
-      const result = await excel(vmpList, ksgList);
-      return result
+  if (id === 'doms') {
+      const xml = await doms({ ksgList, vmpList });
+      await createZip(xml)
+      return true
     }
-    if (id === 'xml') {
-      
-      const zip = new AdmZip();
-      const x = await doms({ ksgList, vmpList });
-      const date = format(new Date(), 'yyMMdd');
-      const xmlCreated = await createXml(x, date);
-      const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС//FM990089F00${date}.xml`);
-      console.log(stat)
-      const add = await zip.addLocalFile(`C:/Users/User/Desktop/Выгрузка ФФОМС//FM990089F00${date}.xml`);
-      console.log(add)
-      const zipFile = await zip.writeZip(`C:/Users/User/Desktop/Выгрузка ФФОМС/FM990089F00${date}.zip`);
+    if (id === 'rmp') {
+      const xml = await rmp({ ksgList, vmpList });
+      await createZip(xml)
       return true
     }
   })
 
   ipcMain.handle('compare', async(e, id) => {
-    const data = await getData(oracledb, config, ffoms.excel);
+    const { ksgList } = await getPreparedData(db, config, ffoms[excel])
     const interinKsg = await getData(oracledb, config, intKsg)
-    const kslpList = await getData(oracledb, config, kslpStr);
-    const list = await parseKslp(kslpList);
-    const { ksg } = await filterData(data, list);
-    const ksgList = await dataBuilder(ksg);
     const result = await compare(interinKsg, ksgList);
     return result
   })
@@ -114,6 +101,7 @@ const db = mongoose.connection;
     })
     // and load the index.html of the app.
     win.webContents.loadFile('../renderer/index.html')
+    win.webContents.openDevTools()
     win.on('ready-to-show', () => {
       win.show()
     })
@@ -140,29 +128,3 @@ const db = mongoose.connection;
   })
   
   app.whenReady().then(createWindow)
-  
-  // .get('/dataMega',
-  //   async (_req, reply) => {
-  //     const files = fs.readdirSync('C:/Users/User/Desktop/Мегаклиника');
-  //     files.forEach((item) => {
-  //       const name = item.slice(-3);
-  //       if (name === 'dbf') {
-  //         fs.unlinkSync(`C:/Users/User/Desktop/Мегаклиника/${item}`);
-  //       }
-  //     });
-  //     const obj = {};
-  //     for (const item of listOfOmsRequests) {
-  //       const result = await getData(oracledb, config, item.req);
-  //       const createDBF = dbfController[item.name];
-  //       if (item.name === 'MU') {
-  //         const interin = await excelParser();
-  //         const res = medicalServList(result, interin);
-  //         createDBF(res);
-  //       } else {
-  //         createDBF(result);
-  //       }
-  //     }
-
-  //     reply.send('success');
-  //   });
-

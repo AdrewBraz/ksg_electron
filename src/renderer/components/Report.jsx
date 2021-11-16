@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExcel, faCode, faDatabase } from '@fortawesome/free-solid-svg-icons';
 import { css } from "@emotion/react";
 import HashLoader from "react-spinners/HashLoader";
-import { DropdownButton, ButtonGroup } from 'react-bootstrap';
+import { DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 
 const renderIcon = (icon) => <FontAwesomeIcon className="icon" icon={icon} />;
 
@@ -14,33 +14,37 @@ const paths = {
     text: 'Отчет за период ФФОМС',
     icon: faFileExcel,
     func: () => window.api.ffomsData('ffomsChannel', 'excel'),
+    type: 'button'
   },
   compare: {
     path: 'compare',
     text: 'Сравнение ксг групп',
     icon: faFileExcel,
     func: () => window.api.ffomsData('compare', 'comp'),
+    type: 'button'
   },
   doms: {
     path: 'doms',
     text: 'ДОМС',
     icon: faCode,
     func: () => window.api.ffomsData('ffomsChannel', 'doms'),
+    type: 'nav'
   },
   rmp: {
     path: 'rmp',
     text: 'РМП',
     icon: faCode,
     func: () => window.api.ffomsData('ffomsChannel', 'rmp'),
+    type: 'nav'
   },
   dbf: {
     path: 'dbf',
     text: 'Выгрузка за период Мегаклиника',
     icon: faDatabase,
-    func: () => window.api.getMegaData('megaChannel')
+    func: () => window.api.getMegaData('megaChannel'),
+    type: 'button'
   },
 };
-
 const renderButton = (path, text, icon) => (
   <div key={path} className="input-group-prepend">
     <button type="submit" onClick={() => { getReport(path); }} className=" btn btn-info btn-sm">
@@ -53,18 +57,22 @@ const renderButton = (path, text, icon) => (
   </div>
 );
 
-const renderNavButton = () => (
-  <div key={path} className="input-group-prepend">
-    <DropdownButton as={ButtonGroup} title='Выгрузка за период ФФОМС' id="bg-nested-dropdown">
-      <Dropdown.Item eventKey="1" onClick={() => { getReport(paths.rmp)}}>
-        {paths.text}
-      </Dropdown.Item>
-      <Dropdown.Item eventKey="2" onClick={() => { getReport(paths.doms)}}>
-        {paths.text}
-      </Dropdown.Item>
-    </DropdownButton>
-  </div>
-);
+const renderNavButton = (coll) =>  (
+    <div className="input-group-prepend">
+      <DropdownButton as={ButtonGroup} title='Выгрузка за период ФФОМС' id="bg-nested-dropdown">
+        {Object.keys(coll).map((item, i) => {
+          const { path, text, icon, type } = coll[item];
+          if( type === 'nav'){
+            return (
+              <Dropdown.Item key={path+type} eventKey={i} onClick={() => { getReport(path)}}>
+                {text}
+              </Dropdown.Item>
+            )
+          }
+        })}
+      </DropdownButton>
+    </div>
+  )
 
 const Report = () => {
   let [loading, setLoading] = useState(false);
@@ -75,7 +83,6 @@ const Report = () => {
     `;
     const getReport = async (path) => {
       const { func } = paths[path]
-      console.log(func)
       try {
         setLoading(true)
         await func().then(() => {
@@ -91,16 +98,17 @@ const Report = () => {
       <div>
         <div className="input-group flex-row justify-content-around w-100">
           {Object.keys(paths).map((item) => {
-            const { path, text, icon } = paths[item];
-            console.log(text);
-            return renderButton(path, text, icon);
+            const { path, text, icon, type } = paths[item];
+            if(type !== 'nav'){
+              return renderButton(path, text, icon)
+            }
           })}
-          {renderNavButton()}
+          {renderNavButton(paths)}
         </div>
       </div>
       <HashLoader size={70} margin={8} color={'#FFFFFF'} loading={loading} css={override} />
     </>
-  );
+  )
 };
 
 export default Report;
