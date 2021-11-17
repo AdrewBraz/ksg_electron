@@ -45,34 +45,6 @@ const paths = {
     type: 'button'
   },
 };
-const renderButton = (path, text, icon) => (
-  <div key={path} className="input-group-prepend">
-    <button type="submit" onClick={() => { getReport(path); }} className=" btn btn-info btn-sm">
-      <p>
-        {text}
-        {' '}
-        <span>{renderIcon(icon)}</span>
-      </p>
-    </button>
-  </div>
-);
-
-const renderNavButton = (coll) =>  (
-    <div className="input-group-prepend">
-      <DropdownButton as={ButtonGroup} title='Выгрузка за период ФФОМС' id="bg-nested-dropdown">
-        {Object.keys(coll).map((item, i) => {
-          const { path, text, icon, type } = coll[item];
-          if( type === 'nav'){
-            return (
-              <Dropdown.Item key={path+type} eventKey={i} onClick={() => { getReport(path)}}>
-                {text}
-              </Dropdown.Item>
-            )
-          }
-        })}
-      </DropdownButton>
-    </div>
-  )
 
 const Report = () => {
   let [loading, setLoading] = useState(false);
@@ -93,6 +65,34 @@ const Report = () => {
         throw new Error('Something went wrong');
       }
     };
+    const renderButton = (path, text, icon) => (
+      <div key={path} className="input-group-prepend">
+        <button type="submit" onClick={() => { getReport(path); }} className=" btn btn-info btn-sm">
+          <p>
+            {text}
+            {' '}
+            <span>{renderIcon(icon)}</span>
+          </p>
+        </button>
+      </div>
+    );
+    const renderNavButton = (coll) =>  (
+      <div className="input-group-prepend">
+        <DropdownButton variant="info" as={ButtonGroup} title='Выгрузка за период ФФОМС' id="bg-nested-dropdown">
+          {Object.keys(coll).map((item, i) => {
+            const { path, text, icon, type } = coll[item];
+            if( type === 'nav'){
+              return (
+                <Dropdown.Item key={path+type} eventKey={i} onClick={() => { getReport(path)}}>
+                  {text}
+                </Dropdown.Item>
+              )
+            }
+          })}
+        </DropdownButton>
+      </div>
+    )
+  
   return (
     <>
       <div>
