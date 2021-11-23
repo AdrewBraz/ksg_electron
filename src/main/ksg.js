@@ -39,7 +39,7 @@ const calculateKsg = (KOEF_Z = 0.1, age, finalCode = 0, patology, days, conditio
   return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV }
 };
 
-const getRatioByUsl = (cod, list, days, type) => {
+const getRatioByUsl = (cod, list, days, type, c_i) => {
   const item = find(list, { COD_USL: cod, MKB_1: '' })
     ? find(list, { COD_USL: cod, MKB_1: '' })
     : find(list, { COD_USL: cod, MKB_1: 'I.' });
@@ -70,7 +70,8 @@ const getRatioByUsl = (cod, list, days, type) => {
 
 const getRatio = (dds, list, cod = '', days, uslList, type) => {
   const item = find(list, { MKB_1: dds, COD_USL: cod });
-  let ratio;
+  const obj1 = {}
+  const obj2 = {}
   if (item === undefined) {
     const {
       ratio, ksg, ksgName, group,
@@ -82,20 +83,19 @@ const getRatio = (dds, list, cod = '', days, uslList, type) => {
   if (cod && days <= 3) {
     const {
       ratio, ksg, ksgName, group,
-    } = getRatioByUsl(cod, uslList, days, type);
-    return {
-      ratio, ksg, ksgName, group,
-    };
+    } = getRatioByUsl(cod, uslList, days, type)
+    obj1.ratio = ratio;
+    obj1.ksg = ksg;
+    obj1.ksgName =ksgName;
+    obj1.group = group;
   }
   if (item) {
-    ratio = item.RATIO;
-    const ksg = item.KSG;
-    const ksgName = item.KSG_NAME;
-    const group = item.GROUP_NUM;
-    return {
-      ratio, ksg, ksgName, group,
-    };
+    obj2.ratio = item.RATIO;
+    obj2.ksg = item.KSG;
+    obj2.ksgName = item.KSG_NAME;
+    obj2.group = item.GROUP_NUM;
   }
+  return obj1.ratio > obj2.ratio ? obj1 : obj2
 };
 
 export { getRatio, calculateKsg, calculateKslp };

@@ -41,6 +41,9 @@ export default async (data) => {
     if (acc[C_I]) {
       const { SUMV: total } = acc[C_I];
       const { KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
+      if(C_I === '2021_8793'){
+        console.log(group, ratio, cod)
+      }
       if (total < SUMV) {
         acc[C_I].KOEF_Z = ratio;
         acc[C_I].KOEF_SPEC = KOEF_SPEC;
@@ -51,11 +54,12 @@ export default async (data) => {
         acc[C_I].ksgName = ksgName;
         acc[C_I].PROFIL_K = getProfil(group) === 81 ? 67 : 26;
         acc[C_I].SUMV = SUMV;
-        acc[C_I].total = SUMV;
       }
     } else {
       const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_PRERV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
-      console.log(SUMV, C_I)
+      if(C_I === '2021_8793'){
+        console.log(group, ratio, cod)
+      }
       acc[C_I] = {
         KOEF_Z: ratio,
         IDNPR: `${PATIENT}_${ID}`,

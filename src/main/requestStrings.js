@@ -53,7 +53,7 @@ r.r_status = 1 and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.10.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
 union all
 select
 oms.fio,
@@ -106,7 +106,7 @@ r.r_status = 1 and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.10.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
 union all
 select
 oms.fio,
@@ -159,7 +159,7 @@ r.r_status = 1 and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('30.09.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('30.12.2021','dd.mm.yyyy') 
 union all
 select
 st.fio,
@@ -299,7 +299,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy')
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy')
 union all
 select
 oms.patient,
@@ -356,7 +356,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy')
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy')
 union all
 select
 oms.patient,
@@ -413,7 +413,7 @@ r.r_status = 1 and tal.talon_num is not null and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('01.12.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
 union all
 select
 list.patient,

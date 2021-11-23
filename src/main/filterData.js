@@ -45,6 +45,9 @@ export default async (data, kslp) => {
     }
     const interin = interinCodes.filter((i) => i.COD === item.SRV_CODE);
     item.SRV_CODE = interin.length > 0 ? interin[0].COD_USL : null;
+    if(item.C_I === '2021_9039'){
+      console.log(item)
+    }
     return item;
   }).filter((item) => item.DDS !== 'U07.1' && item.DDS !== 'U07.2');
   return { vmp, ksg };

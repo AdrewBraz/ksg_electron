@@ -7,26 +7,23 @@ const sheetBuilder = async (interinKsg, ksgList, workbook) => {
   
   const ksg = Object.values(ksgList).filter(item =>  findKey(interinKsg, { C_I: item.C_I }))
   const translateInterinKeys = {
-    FIO: 'ФИО',
     DDS: 'Диагноз',
     C_I: 'ИБ',
     F_KSG_NUM: 'Группа',
     F_CR_SERVICE_CODE: 'Услуга',
-    ORG: 'Отделение',
     F_MES_NAME: 'Название КСГ',
     F_MES_CODE: 'Код КСГ',
     F_MES_SUMM: 'Cумма',
 
   };
   const translateKsgKeys = {
-    FIO: 'ФИО',
     DS1: 'Диагноз',
     C_I: 'ИБ',
     GR: 'Группа',
     cod: 'Услуга',
     ksgName: 'Название КСГ',
     N_KSG: 'Код КСГ',
-    total: 'Cумма',
+    SUMV: 'Cумма',
   };
 
   const vmpIncludeKeys = Object.keys(translateInterinKeys);
@@ -47,6 +44,7 @@ const sheetBuilder = async (interinKsg, ksgList, workbook) => {
     acc.push(values);
     return acc;
   }, []);
+  console.log(ksgColumns)
   const worksheet = workbook.addWorksheet('КСГ');
   worksheet.headerFooter.differentFirst = true;
   worksheet.headerFooter.firstHeader = 'КСГ';

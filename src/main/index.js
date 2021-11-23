@@ -33,12 +33,14 @@ const db = mongoose.connection;
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
     const requestString = ffoms[id];
+    console.log(id)
     const { vmpList, ksgList } = await getPreparedData(oracledb, config, requestString)
-    if( requestString === 'excel'){
+    if( id === 'excel'){
       if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
         fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
       }
       const result = await excel(vmpList, ksgList)
+      return result
     }
   if (id === 'doms') {
       const xml = await doms({ ksgList, vmpList });
@@ -53,8 +55,10 @@ const db = mongoose.connection;
   })
 
   ipcMain.handle('compare', async(e, id) => {
-    const { ksgList } = await getPreparedData(oracledb, config, ffoms[excel])
+    console.log(ffoms['excel'])
+    const { ksgList } = await getPreparedData(oracledb, config, ffoms['excel'])
     const interinKsg = await getData(oracledb, config, intKsg)
+
     const result = await compare(interinKsg, ksgList);
     return result
   })
