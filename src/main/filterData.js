@@ -32,22 +32,28 @@ export default async (data, kslp) => {
   });
   const ksg = ksgList.map((item) => {
     checkPATOLOGY(item, kslp)
+    const calculateDays = Math.round((item.OUT_DATE.getTime() - item.IN_DATE.getTime()) / (24 * 3600 * 1000));
     if (parseInt(item.C_I.slice(5)) >= 30000) {
       if (dayServList.includes(item.SRV_CODE)) {
+        item.DAYS = (Math.floor(calculateDays) + 1)
+        item.DIFF_CRITERIA = item.DAYS === 1 ? 'pbt' : ''
         return item;
       }
       const interin = interinCodes.filter((i) => i.COD === item.SRV_CODE);
       item.SRV_CODE = interin.length > 0 ? interin[0].COD_USL : null;
+      item.DAYS = (Math.floor(calculateDays) + 1)
+      item.DIFF_CRITERIA = item.DAYS === 1 ? 'pbt' : ''
       return item;
     }
     if (hospServList.includes(item.SRV_CODE)) {
+      item.DAYS = calculateDays;
+      item.DIFF_CRITERIA = '';
       return item;
     }
     const interin = interinCodes.filter((i) => i.COD === item.SRV_CODE);
-    item.SRV_CODE = interin.length > 0 ? interin[0].COD_USL : null;
-    if(item.C_I === '2021_9039'){
-      console.log(item)
-    }
+    item.SRV_CODE = interin.length > 0 ? interin[0].COD_USL : null
+    item.DAYS = calculateDays;
+    item.DIFF_CRITERIA = '';
     return item;
   }).filter((item) => item.DDS !== 'U07.1' && item.DDS !== 'U07.2');
   return { vmp, ksg };

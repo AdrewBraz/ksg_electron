@@ -48,12 +48,6 @@ const sheetBuilder = async (vmp, ksg, workbook) => {
   const ksgColumns = ksgKeys.map((key) => ({ name: translateKsgKeys[key], filterButton: true }));
 
   const ksgRows = Object.keys(ksg).reduce((acc, item) => {
-    if(ksg[item].kz === undefined && ksg[item].PODR == 321){
-      const {AGE, PATOLOGY, FINAL_CODE, DAYS, USL_OK } = ksg[item] 
-      ksg[item].total = calculateKsg(9.74, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
-      ksg[item].GR = 154
-      ksg[item].N_KSG = 'ds36.004' 
-    }
     const values = Object.keys(ksg[item]).filter((item) => ksgIncludeKeys.includes(item)).map((key) => ksg[item][key]);
     acc.push(values);
     return acc;

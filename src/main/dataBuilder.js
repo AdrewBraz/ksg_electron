@@ -17,12 +17,10 @@ export default async (data) => {
   const dailyUsl = await dailyUslList(filteredListUSl);
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, ID, FINAL_CODE
+      PATIENT, USL_OK, C_T, C_I, PATOLOGY, DAYS, S_POL, SN_POL, DDS, DIFF_CRITERIA, AGE, IN_DATE, OUT_DATE, ID, FINAL_CODE
     } = item;
     let SNPOLIS;
     let ENP;
-    const calculateDays = Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000));
-    const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
     if (S_POL || SN_POL.length !== 16) {
       if (!S_POL) {
         SNPOLIS = `${SN_POL}`;
@@ -37,12 +35,12 @@ export default async (data) => {
     const RSLT = getRslt(FINAL_CODE, USL_OK);
     const {
       ratio, ksg, ksgName, group,
-    } = USL_OK === 1 ? getRatio(DDS, hospDs, cod, DAYS, hospUsl, USL_OK) : getRatio(DDS, dailyDs, cod, DAYS, dailyUsl, USL_OK);
+    } = USL_OK === 1 ? getRatio(DDS, hospDs, cod, DAYS, hospUsl, USL_OK, DIFF_CRITERIA, C_I) : getRatio(DDS, dailyDs, cod, DAYS, dailyUsl, USL_OK, DIFF_CRITERIA, C_I);
     if (acc[C_I]) {
       const { SUMV: total } = acc[C_I];
-      const { KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
-      if(C_I === '2021_8793'){
-        console.log(group, ratio, cod)
+      const { KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, group, USL_OK, AGE)
+      if(C_I === '2021_9243'){
+        console.log(SUMV, group, DAYS)
       }
       if (total < SUMV) {
         acc[C_I].KOEF_Z = ratio;
@@ -56,10 +54,7 @@ export default async (data) => {
         acc[C_I].SUMV = SUMV;
       }
     } else {
-      const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_PRERV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, USL_OK)
-      if(C_I === '2021_8793'){
-        console.log(group, ratio, cod)
-      }
+      const { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_PRERV, KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, group, USL_OK, AGE)
       acc[C_I] = {
         KOEF_Z: ratio,
         IDNPR: `${PATIENT}_${ID}`,
