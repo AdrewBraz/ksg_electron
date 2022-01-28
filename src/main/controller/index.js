@@ -5,7 +5,7 @@ const dsController = async (ds, reply) => {
     { $match: { MKB_1: { $regex: `^${ds}`, $options: 'i' }, GROUP_NUM: { $in: [27, 76, 77, 78, 79, 80, 81, 82, 83, 84, 96, 97, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257] } } },
     {
       $lookup: {
-        from: 'ksg_ratio',
+        from: 'ksg_ratio22',
         localField: 'KSG',
         foreignField: 'KSG',
         as: 'ratio',
@@ -41,7 +41,7 @@ const uslController = async (usl, reply) => {
     { $match: { ...regexObj, GROUP_NUM: { $in: [27, 76, 77, 78, 79, 80, 81, 82, 83, 84, 96, 97, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257] } } },
     {
       $lookup: {
-        from: 'ksg_ratio',
+        from: 'ksg_ratio22',
         localField: 'KSG',
         foreignField: 'KSG',
         as: 'ratio',
@@ -74,7 +74,7 @@ const listDsController = async (list) => {
     },
     {
       $lookup: {
-        from: 'ksg_ratio',
+        from: 'ksg_ratio22',
         localField: 'KSG',
         foreignField: 'KSG',
         as: 'ratio',
@@ -107,7 +107,7 @@ const listUslController = async (list) => {
     },
     {
       $lookup: {
-        from: 'ksg_ratio',
+        from: 'ksg_ratio22',
         localField: 'KSG',
         foreignField: 'KSG',
         as: 'ratio',

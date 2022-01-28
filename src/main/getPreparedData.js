@@ -2,16 +2,17 @@ import getData from './getData';
 import getVmpData from './getVmpData';
 import filterData from './filterData';
 import dataBuilder from './dataBuilder';
+import rmpData from './rmpData'
 import parseKslp from './parseKslp';
-import { kslpStr } from './requestStrings';
+import { vmpReq, xml } from './requestStrings';
 
 
 export default async(db, config, request) => {
-  const data = await getData(db, config, request);
-  const kslpList = await getData(db, config, kslpStr);
+  const ksg = await getData(db, config, xml);
+  const vmp = await getData(db, config, vmpReq);
   const list = await parseKslp(kslpList);
   const { vmp, ksg } = await filterData(data, list);
   const vmpList = await getVmpData(vmp);
-  const ksgList = await dataBuilder(ksg);
-  return { vmpList, ksgList}
+  const ksgList = rmpData(ksg)
+  return { vmpList, ksgList: ksg}
 }

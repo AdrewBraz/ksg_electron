@@ -1,10 +1,11 @@
-export const kslpStr = `select concat('2021_', T_CODE) C_I, KIND1 DS from Z.ZI_DIAG_IB_LIST_ALL where kind in ('клинический заключительный (эпикриз)', 'клинический заключительный')`;
+export const kslpStr = `select concat('2022_', T_CODE) C_I, KIND1 DS from Z.ZI_DIAG_IB_LIST_ALL where kind in ('клинический заключительный (эпикриз)', 'клинический заключительный')`;
 
 const excel = `select 
-oms.fio, oms.patient, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(pol.c_t, '77', 'Москва', 'Иногород') C_T, decode(oms.org, 'Дс', 2, 1) USL_OK  from (
+oms.fio, oms.patient,oms.id, oms.c_i, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.c_t, oms.usl_ok, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age from (
 select
 oms.fio,
 oms.patient,
+oms.id,
 oms.c_i,
 oms.cod,
 oms.dds,
@@ -12,6 +13,8 @@ oms.dr,
 oms.w,
 oms.s_pol,
 oms.sn_pol,
+oms.c_t,
+oms.usl_ok,
 oms.in_date,
 oms.out_date,
 oms.org,
@@ -25,6 +28,7 @@ from
 (SELECT DISTINCT
 st.fio,
 vst.patient,
+vst.id,
 vst.c_i,
 vst.cod,
 vst.dds,
@@ -32,6 +36,8 @@ vst.dr,
 vst.w,
 vst.s_pol,
 vst.sn_pol,
+vst.c_t,
+vst.usl_ok,
 vst.in_date,
 vst.out_date,
 vst.org,
@@ -47,17 +53,18 @@ inner join st.oms_list_v st on st.patient = vst.patient
 left join od_vorders r on r.chart_id = ch.id
 left join od_vec_srvs e on r.r_service_id = e.id
 WHERE 
-vst.cod not like '200%' and
+vst.cod not like '200%'  and vst.channel not like 'Городская скорая помощь' and
 r.status = 0 and
 r.r_status = 1 and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.12.2020','dd.mm.yyyy') and to_date('31.12.2022','dd.mm.yyyy') 
 union all
 select
 oms.fio,
 oms.patient,
+oms.id,
 oms.c_i,
 oms.cod,
 oms.dds,
@@ -65,6 +72,8 @@ oms.dr,
 oms.w,
 oms.s_pol,
 oms.sn_pol,
+oms.c_t,
+oms.usl_ok,
 oms.in_date,
 oms.out_date,
 oms.org,
@@ -78,6 +87,7 @@ from
 (SELECT DISTINCT
 st.fio,
 vst.patient,
+vst.id,
 vst.c_i,
 nvl(vst.cod, '69090') as cod,
 vst.dds,
@@ -85,59 +95,8 @@ vst.dr,
 vst.w,
 vst.s_pol,
 vst.sn_pol,
-vst.in_date,
-vst.out_date,
-vst.org,
-vst.org_code,
-vst.final_code,
-nvl(e.code, e.code1) srv_code,
-nvl(e.fullname,e.name) srv_name,
-trunc(r.r_date) usl_date,
-vst.age
-from st.ksg_list_v vst
-inner join t_med_chrts ch on ch.id = vst.id
-inner join st.oms_list_v st on st.patient = vst.patient
-left join od_vorders r on r.chart_id = ch.id
-left join od_vec_srvs e on r.r_service_id = e.id
-WHERE 
-vst.cod is null  and
-r.status = 0 and
-r.r_status = 1 and
-e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
-ORDER BY c_i) oms,
-queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
-union all
-select
-oms.fio,
-oms.patient,
-oms.c_i,
-oms.cod,
-oms.dds,
-oms.dr,
-oms.w,
-oms.s_pol,
-oms.sn_pol,
-oms.in_date,
-oms.out_date,
-oms.org,
-oms.org_code,
-oms.final_code,
-nvl(oms.srv_code, null) as srv_code,
-nvl(oms.srv_name, null) as srv_name,
-oms.usl_date,
-oms.age
-from
-(SELECT DISTINCT
-st.fio,
-vst.patient,
-vst.c_i,
-vst.cod,
-vst.dds,
-vst.dr,
-vst.w,
-vst.s_pol,
-vst.sn_pol,
+vst.c_t,
+vst.usl_ok,
 vst.in_date,
 vst.out_date,
 vst.org,
@@ -153,17 +112,77 @@ inner join st.oms_list_v st on st.patient = vst.patient
 left join od_vorders r on r.chart_id = ch.id
 left join od_vec_srvs e on r.r_service_id = e.id
 WHERE 
-vst.cod not like '200%' and
+vst.cod is null and vst.channel not like 'Городская скорая помощь'  and
 r.status = 0 and
 r.r_status = 1 and
 e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
 ORDER BY c_i) oms,
 queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.06.2021','dd.mm.yyyy') and to_date('30.12.2021','dd.mm.yyyy') 
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.12.2020','dd.mm.yyyy') and to_date('31.12.2022','dd.mm.yyyy') 
+union all
+select
+oms.fio,
+oms.patient,
+oms.id,
+oms.c_i,
+oms.cod,
+oms.dds,
+oms.dr,
+oms.w,
+oms.s_pol,
+oms.sn_pol,
+oms.c_t,
+oms.usl_ok,
+oms.in_date,
+oms.out_date,
+oms.org,
+oms.org_code,
+oms.final_code,
+nvl(oms.srv_code, null) as srv_code,
+nvl(oms.srv_name, null) as srv_name,
+oms.usl_date,
+oms.age
+from
+(SELECT DISTINCT
+st.fio,
+vst.patient,
+vst.id,
+vst.c_i,
+vst.cod,
+vst.dds,
+vst.dr,
+vst.w,
+vst.s_pol,
+vst.sn_pol,
+vst.c_t,
+vst.usl_ok,
+vst.in_date,
+vst.out_date,
+vst.org,
+vst.org_code,
+vst.final_code,
+nvl(e.code1, e.code) srv_code,
+nvl(e.fullname,e.name) srv_name,
+trunc(r.r_date) usl_date,
+vst.age
+from st.ksg_list_v vst
+inner join t_med_chrts ch on ch.id = vst.id
+inner join st.oms_list_v st on st.patient = vst.patient
+left join od_vorders r on r.chart_id = ch.id
+left join od_vec_srvs e on r.r_service_id = e.id
+WHERE 
+vst.cod not like '200%'  and vst.channel not like 'Городская скорая помощь' and
+r.status = 0 and
+r.r_status = 1 and
+e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
+ORDER BY c_i) oms,
+queries qu
+where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.12.2021','dd.mm.yyyy') and to_date('30.12.2022','dd.mm.yyyy') 
 union all
 select
 st.fio,
 list.patient,
+list.id,
 list.c_i,
 list.cod,
 list.dds,
@@ -171,6 +190,8 @@ list.dr,
 list.w,
 list.s_pol,
 list.sn_pol,
+list.c_t,
+list.usl_ok,
 list.in_date,
 list.out_date,
 list.org,
@@ -182,11 +203,12 @@ null usl_date,
 list.age
 from st.ksg_list_v list
 inner join st.oms_list_v st on st.patient = list.patient
-where list.cod like '200%'
+where list.cod like '200%' and list.cod not in ('200530', '200525', '200409', '200510' ) and  list.channel not like 'Городская скорая помощь'
 union all
 select
 st.fio,
 list.patient,
+list.id,
 list.c_i,
 list.cod,
 list.dds,
@@ -194,6 +216,8 @@ list.dr,
 list.w,
 list.s_pol,
 list.sn_pol,
+list.c_t,
+list.usl_ok,
 list.in_date,
 list.out_date,
 list.org,
@@ -205,9 +229,9 @@ null usl_date,
 list.age
 from st.ksg_list_v list
 inner join st.oms_list_v st on st.patient = list.patient
-where list.cod not in ('200530', '200525', '200409', '200510')
+where list.cod in ('200530', '200525', '200409', '200510')
 ) oms
-inner join oms_pat_pol pol on oms.patient = pol.patient
+where oms.id not in (select id from st.interin_ksg)
 `;
 
 const doc = `select * from oms_pat_doc doc inner join oms_pat_pol pol on doc.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
@@ -242,254 +266,58 @@ export const listOfOmsRequests = [
   { name: 'MB', req: history },
 ];
 
-const xml = `
-select oms.patient, oms.c_i, oms.id, oms.cod, oms.dds, oms.dr, oms.w, oms.s_pol, nvl(oms.sn_pol, '123456789012345') sn_pol, oms.in_date, oms.out_date, oms.org as PODR_NAME, oms.org_code as PODR, nvl(oms.final_code, '0') final_code, oms.srv_code, oms.srv_name, oms.usl_date, oms.age, decode(oms.org, 'Дс', 2, 1) USL_OK, oms.tal_num, oms.tal_d from (
-select
-oms.patient,
-oms.id,
-oms.c_i,
-oms.cod,
-oms.dds,
-oms.dr,
-oms.w,
-oms.s_pol,
-oms.sn_pol,
-oms.in_date,
-oms.out_date,
-oms.org,
-oms.org_code,
-oms.final_code,
-nvl(oms.srv_code, null) as srv_code,
-nvl(oms.srv_name, null) as srv_name,
-oms.usl_date,
-oms.age,
-oms.tal_num,
-oms.tal_d
-from
-(SELECT DISTINCT
-vst.patient,
-vst.id,
-vst.c_i,
-vst.cod,
-vst.dds,
-vst.dr,
-vst.w,
-vst.s_pol,
-nvl(vst.sn_pol, '123456789012345') sn_pol,
-vst.in_date,
-vst.out_date,
-vst.org,
-vst.org_code,
-vst.final_code,
-nvl(e.code1, e.code) srv_code,
-nvl(e.fullname,e.name) srv_name,
-trunc(r.r_date) usl_date,
-vst.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v vst
-inner join t_med_chrts ch on ch.id = vst.id
-inner join a.t_smh_plans tal on vst.id = tal.t_med_chrt_id
-left join od_vorders r on r.chart_id = ch.id
-left join od_vec_srvs e on r.r_service_id = e.id
-WHERE 
-vst.cod not like '200%'  and vst.channel not like 'Городская скорая помощь' and
-r.status = 0 and
-r.r_status = 1 and tal.talon_num is not null and
-e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
-ORDER BY c_i) oms,
-queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy')
-union all
-select
-oms.patient,
-oms.id,
-oms.c_i,
-oms.cod,
-oms.dds,
-oms.dr,
-oms.w,
-oms.s_pol,
-oms.sn_pol,
-oms.in_date,
-oms.out_date,
-oms.org,
-oms.org_code,
-oms.final_code,
-nvl(oms.srv_code, null) as srv_code,
-nvl(oms.srv_name, null) as srv_name,
-oms.usl_date,
-oms.age,
-oms.tal_num,
-oms.tal_d
-from
-(SELECT DISTINCT
-vst.patient,
-vst.id,
-vst.c_i,
-vst.cod,
-vst.dds,
-vst.dr,
-vst.w,
-vst.s_pol,
-nvl(vst.sn_pol, '123456789012345') sn_pol,
-vst.in_date,
-vst.out_date,
-vst.org,
-vst.org_code,
-vst.final_code,
-nvl(e.code, e.code1) srv_code,
-nvl(e.fullname,e.name) srv_name,
-trunc(r.r_date) usl_date,
-vst.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v vst
-inner join t_med_chrts ch on ch.id = vst.id
-inner join a.t_smh_plans tal on vst.id = tal.t_med_chrt_id
-left join od_vorders r on r.chart_id = ch.id
-left join od_vec_srvs e on r.r_service_id = e.id
-WHERE 
-vst.cod not like '200%'  and vst.channel not like 'Городская скорая помощь' and
-r.status = 0 and
-r.r_status = 1 and tal.talon_num is not null and
-e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
-ORDER BY c_i) oms,
-queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy')
-union all
-select
-oms.patient,
-oms.id,
-oms.c_i,
-oms.cod,
-oms.dds,
-oms.dr,
-oms.w,
-oms.s_pol,
-oms.sn_pol,
-oms.in_date,
-oms.out_date,
-oms.org,
-oms.org_code,
-oms.final_code,
-nvl(oms.srv_code, null) as srv_code,
-nvl(oms.srv_name, null) as srv_name,
-oms.usl_date,
-oms.age,
-oms.tal_num,
-oms.tal_d
-from
-(SELECT DISTINCT
-vst.patient,
-vst.id,
-vst.c_i,
-nvl(vst.cod, '69070') as cod,
-vst.dds,
-vst.dr,
-vst.w,
-vst.s_pol,
-nvl(vst.sn_pol, '123456789012345') sn_pol,
-vst.in_date,
-vst.out_date,
-vst.org,
-vst.org_code,
-vst.final_code,
-nvl(e.code1, e.code) srv_code,
-nvl(e.fullname,e.name) srv_name,
-trunc(r.r_date) usl_date,
-vst.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v vst
-inner join t_med_chrts ch on ch.id = vst.id
-inner join a.t_smh_plans tal on vst.id = tal.t_med_chrt_id
-left join od_vorders r on r.chart_id = ch.id
-left join od_vec_srvs e on r.r_service_id = e.id
-WHERE 
-vst.cod is null and vst.channel not like 'Городская скорая помощь' and
-r.status = 0 and
-r.r_status = 1 and tal.talon_num is not null and
-e.stype in ('ST_DIAG', 'ST_OPER', 'ST_PROC')
-ORDER BY c_i) oms,
-queries qu
-where lower(qu.title) = 'список оказанных услуг по иб' and trunc(oms.usl_date) between to_date('01.07.2021','dd.mm.yyyy') and to_date('31.12.2021','dd.mm.yyyy') 
-union all
-select
-list.patient,
-list.id,
-list.c_i,
-list.cod,
-list.dds,
-list.dr,
-list.w,
-list.s_pol,
-nvl(list.sn_pol, '123456789012345') sn_pol,
-list.in_date,
-list.out_date,
-list.org,
-list.org_code,
-list.final_code,
-list.cod srv_code,
-null srv_name,
-null usl_date,
-list.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v list
-inner join a.t_smh_plans tal on list.id = tal.t_med_chrt_id
-where cod like '200%' and cod not in ('200530', '200525', '200409', '200510' ) and  list.channel not like 'Городская скорая помощь' and tal.talon_num is not null
-union all
-select
-list.patient,
-list.id,
-list.c_i,
-list.cod,
-list.dds,
-list.dr,
-list.w,
-list.s_pol,
-nvl(list.sn_pol, '123456789012345') sn_pol,
-list.in_date,
-list.out_date,
-list.org,
-list.org_code,
-list.final_code,
-list.cod srv_code,
-null srv_name,
-null usl_date,
-list.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v list
-inner join a.t_smh_plans tal on list.id = tal.t_med_chrt_id
-where cod in ('200530', '200525', '200409', '200510') and tal.talon_num is not null
-union all
-select
-oms.patient,
-oms.id,
-oms.c_i,
-nvl(oms.cod, '69090') cod,
-oms.dds,
-oms.dr,
-oms.w,
-oms.s_pol,
-nvl(oms.sn_pol, '123456789012345') sn_pol,
-oms.in_date,
-oms.out_date,
-oms.org,
-oms.org_code,
-oms.final_code,
-null as srv_code,
-null as srv_name,
-null usl_date,
-oms.age,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from st.ksg_list_v oms
-inner join a.t_smh_plans tal on oms.id = tal.t_med_chrt_id
-where tal.talon_num is not null and oms.cod not like '%200' and oms.channel not like 'Городская скорая помощь' and tal.status not like '99') oms where oms.dds is not null and oms.org not like 'Дс'
+const xml = `select 
+st.fio,
+st.patient,
+st.id,
+st.c_i,
+wi.f_mkb10_code dds,
+st.dr,
+st.w,
+st.s_pol,
+st.sn_pol,
+st.c_t,
+st.usl_ok,
+st.in_date,
+st.out_date,
+st.org,
+st.org_code,
+st.final_code,
+st.age,
+wi.f_mes_code,
+wi.f_mes_name,
+wi.f_ksg_num,
+wi.f_c_kslp,
+nvl(wi.f_mes_summ, wi.f_mes_price) f_mes_summ,
+wi.f_cr_service_code,
+tal.talon_num tal_num,
+tal.talon_date tal_d
+from st.interin_kst st
+inner join  a.t_smh_plans tal on tal.t_med_chrt_id = st.id
+where tal.talon_num is not null and st.c_i in ('2022_197', '2022_329', '2022_39')
 `;
+
+export const vmpReq = `select 
+v.patient,
+v.id, 
+v.fio,
+v.c_i,
+v.dds,
+v.w,
+v.s_pol,
+v.sn_pol,
+v.c_t,
+v.usl_ok,
+v.cod,
+v.in_date,
+v.out_date,
+v.org,
+v.org_code,
+v.final_code
+v.age,
+tal.talon_num tal_num,
+tal.talon_date tal_d
+from st.ksg_list_v v inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and tal.talon_num is not null `
 
 export const ksg = `select 
 st.fio,
@@ -501,6 +329,8 @@ st.dr,
 st.w,
 st.s_pol,
 st.sn_pol,
+st.c_t,
+st.usl_ok,
 st.in_date,
 st.out_date,
 st.org,
@@ -510,14 +340,10 @@ st.age,
 wi.f_mes_code,
 wi.f_mes_name,
 wi.f_ksg_num,
+wi.f_c_kslp,
 nvl(wi.f_mes_summ, wi.f_mes_price) f_mes_summ,
 wi.f_cr_service_code,
-tal.talon_num as tal_num,
-tal.talon_date as tal_d
-from wi.x$ksg wi
-inner join st.ksg_list_v st on wi.f_t_med_chrt_id = st.id
-inner join a.t_smh_plans tal on wi.f_t_med_chrt_id = tal.t_med_chrt_id
-where wi.status like '50'`
+from st.interin_kst st`
 
 export const ffoms = {
   rmp: xml,

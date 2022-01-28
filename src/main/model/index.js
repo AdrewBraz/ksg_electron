@@ -22,4 +22,4 @@ const KsgSchema = new Schema({
   GROUP_NUM: Number,
 });
 
-export default mongoose.model('KSG', KsgSchema, 'ksg');
+export default mongoose.model('KSG22', KsgSchema, 'ksg22');

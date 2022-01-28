@@ -3,7 +3,7 @@ import interinController from './controller/interinController';
 import { allUsl } from './controller/index';
 import { allUsl as allDayUsl } from './controller/ds';
 
-const vmpCodes = ['200409', '200510', '200518', '200519', '200520', '200524', '200522', '200523', '200525', '200530'];
+const vmpCodes = ['200409', '200510', '200518', '200519', '200520', '200524', '200522', '200523', '200570', '200525', '200530'];
 
 const checkPATOLOGY = (item, kslp) => {
   const { diab, hiv, hyper } = kslp;

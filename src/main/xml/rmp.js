@@ -34,6 +34,7 @@ export default (coll) => {
     .up();
 
   Object.values(vmpList).forEach((item) => {
+    console.log(item)
     const adr = utf8_decode(item.ADR_NAME);
     const frag = fragment()
       .ele('N_ZAP').txt(counter.getNext()).up()
@@ -96,6 +97,7 @@ export default (coll) => {
     const { ENP, SNPOLIS } = item;
     if (ENP) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(1).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -128,6 +130,7 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(1).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -160,6 +163,7 @@ export default (coll) => {
     }
   });
   Object.values(ksgList).forEach((item) => {
+    console.log(item)
     const {
       ENP, SNPOLIS, cod, SL_K, kslp, PATOLOGY,
     } = item;
@@ -248,6 +252,7 @@ export default (coll) => {
     }
     if (ENP) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(1).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -279,6 +284,7 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(1).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()

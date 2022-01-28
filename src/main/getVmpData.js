@@ -16,18 +16,22 @@ const vHmp = [{
 }, {
   GROUP: 41, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167, DZP: 0.33
 }, {
-  GROUP: 43, VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17
+  GROUP: 44, VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17
 }, {
-  GROUP: 45, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.36
+  GROUP: 46, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.36
 }, {
-  GROUP: 46, VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.51
-}];
+  GROUP: 48, VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.51
+},
+{
+  GROUP: 43, VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24
+},
+];
 
 export default async (data) => {
   const vmpData = await vmpController();
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, TAL_D, TAL_NUM, FINAL_CODE, ID,
+      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID,
     } = item;
     const obj = vmpData.find((el) => el.ID === (item.COD).toString());
     const { GROUP, PRICE, NAME, NFS } = obj;
@@ -53,8 +57,6 @@ export default async (data) => {
       W,
       ENP,
       AGE,
-      TAL_D,
-      TAL_NUM,
       POVOD: 3,
       C_I,
       DS1: DDS,

@@ -1,15 +1,15 @@
 import { uniqBy, find } from 'lodash';
 
 const calculateKslp = (age, patology = null, days = 0) => {
-  let kslp = 1;
+  let kslp = 0;
   if (age > 75) {
-    kslp = 1.1;
+    kslp = 0.2;
   }
   if (days > 75) {
-    kslp = 1.4;
+    kslp = 0.4;
   }
   if (patology) {
-    kslp = 1.8;
+    kslp = 0.6;
   }
   return kslp;
 };
@@ -25,14 +25,14 @@ const abourtedRatio = (days) => {
 };
 
 const calculateKsg = (KOEF_Z = 0.1, age, finalCode = 0, patology, days, group, condition) => {
-  const SRED_NFZ = condition === 1 ? 56680.9 : 25617.30;
-  const KOEF_PRIV = condition === 1 ? 0.41 : 0.52;
+  const SRED_NFZ = condition === 1 ? 70119 : 44102.9;
+  const KOEF_PRIV = condition === 1 ? 0.35 : 0.38;
   const KOEF_SPEC = KOEF_Z >= 2 ? 1.4 : 0.8;
   const KOEF_D = 1.672;
   let KOEF_PRERV = 1;
   const kslp = calculateKslp(age, patology, days);
-  const SUMV = Math.round(((SRED_NFZ * KOEF_PRIV * KOEF_SPEC * KOEF_Z * kslp * KOEF_D) + Number.EPSILON)*100)/100;
-  if(group === 235 || group === 154 || group === 113){
+  const SUMV = Math.round(((SRED_NFZ * KOEF_PRIV * KOEF_D *( KOEF_Z * KOEF_SPEC + kslp)) + Number.EPSILON)*100)/100;
+  if(group === 240 || group === 154 || group === 119){
     let KOEF_PRERV = 1;
     return { SRED_NFZ, KOEF_D, KOEF_PRIV, KOEF_SPEC, KOEF_PRERV, KOEF_Z, SUMV }
   }
@@ -62,12 +62,12 @@ const getRatioByUsl = (cod, list, days, type, C_I) => {
   if (DURATION === 1 && days > 3) {
     return { ratio: 0, ksg: '', ksgName: '', group: '' };
   }
-  if (group === 235 && days <= 3 && type === 1) {
+  if (group === 240 && days <= 3 && type === 1) {
     return {
       ratio, ksg, ksgName, group, DURATION
     };
   }
-  if (group === 113 && days <= 1 && type === 2) {
+  if (group === 119 && days <= 1 && type === 2) {
     return {
       ratio, ksg, ksgName, group
     };

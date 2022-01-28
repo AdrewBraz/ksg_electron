@@ -14,6 +14,7 @@ const sheetBuilder = async (interinKsg, ksgList, workbook) => {
     F_MES_NAME: 'Название КСГ',
     F_MES_CODE: 'Код КСГ',
     F_MES_SUMM: 'Cумма',
+    F_C_KSLP: 'КСЛП'
 
   };
   const translateKsgKeys = {
@@ -24,6 +25,7 @@ const sheetBuilder = async (interinKsg, ksgList, workbook) => {
     ksgName: 'Название КСГ',
     N_KSG: 'Код КСГ',
     SUMV: 'Cумма',
+    PATOLOGY: 'Соп. заболевание'
   };
 
   const vmpIncludeKeys = Object.keys(translateInterinKeys);

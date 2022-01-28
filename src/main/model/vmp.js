@@ -11,4 +11,4 @@ const vmpSchema = new Schema({
   PRICE: Number,
 });
 
-export default mongoose.model('VMP', vmpSchema, 'vmp');
+export default mongoose.model('VMP22', vmpSchema, 'vmp22');
