@@ -76,7 +76,7 @@ export default async (data) => {
       ADR_NAME: utf8_decode('121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А'),
       DATE_Z_1: IN_DATE,
       DATE_Z_2: OUT_DATE,
-      KD_Z: Math.ceil(parseInt((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000))),
+      KD_Z: Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000)),
       RSLT,
       ISHOD,
       IS_PRERV: 0,

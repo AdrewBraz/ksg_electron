@@ -4,15 +4,17 @@ import filterData from './filterData';
 import dataBuilder from './dataBuilder';
 import rmpData from './rmpData'
 import parseKslp from './parseKslp';
-import { vmpReq, xml } from './requestStrings';
+import { vmpReq, kslpStr } from './requestStrings';
 
 
 export default async(db, config, request) => {
-  const ksg = await getData(db, config, xml);
+  console.log(request)
+  const ksgData = await getData(db, config, request);
   const vmp = await getData(db, config, vmpReq);
+  const kslpList = await getData(db, config, kslpStr);
   const list = await parseKslp(kslpList);
-  const { vmp, ksg } = await filterData(data, list);
+  const { ksg } = await filterData(ksgData, list);
   const vmpList = await getVmpData(vmp);
   const ksgList = rmpData(ksg)
-  return { vmpList, ksgList: ksg}
+  return {vmpList, ksgList}
 }

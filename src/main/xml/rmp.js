@@ -28,13 +28,12 @@ export default (coll) => {
     .up()
     .ele('OTPR')
       .ele('CODE_MO').txt(990089).up()
-      .ele('YEAR').txt(2021).up()
+      .ele('YEAR').txt(2022).up()
       .ele('MONTH').txt(getMonth(new Date()) + 1).up()
     .ele('DAY').txt(getDate(lastDayOfMonth(new Date()))).up()
     .up();
 
   Object.values(vmpList).forEach((item) => {
-    console.log(item)
     const adr = utf8_decode(item.ADR_NAME);
     const frag = fragment()
       .ele('N_ZAP').txt(counter.getNext()).up()
@@ -52,7 +51,6 @@ export default (coll) => {
         .ele('PROFIL').txt(item.PROFIL).up()
         .ele('GR_HMP').txt(`${item.GR_HMP}`).up()
         .ele('VID_HMP').txt(`${item.VID_HMP}`).up()
-        .ele('METOD_HMP').txt(`${item.METOD_HMP}`).up()
         .ele('RESH_HMP').txt(1).up()
         .ele('PODR').txt(`${item.PODR}`).up()
         .ele('PODR_NAME').txt(`${item.PODR_NAME}`).up()
@@ -97,7 +95,6 @@ export default (coll) => {
     const { ENP, SNPOLIS } = item;
     if (ENP) {
       const fragPol = fragment()
-        .ele('VPOLIS').txt(1).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -130,7 +127,6 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
-        .ele('VPOLIS').txt(1).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -163,10 +159,10 @@ export default (coll) => {
     }
   });
   Object.values(ksgList).forEach((item) => {
-    console.log(item)
     const {
-      ENP, SNPOLIS, cod, SL_K, kslp, PATOLOGY,
+      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, PATOLOGY,
     } = item;
+    console.log(item)
     const frag = fragment()
     .ele('N_ZAP').txt(counter.getNext()).up()
     .ele('TYPE').txt('PRIL4').up()
@@ -214,12 +210,12 @@ export default (coll) => {
           .ele('DS_GR').txt(`${item.DS1}`).up()
           .ele('DS1').txt(`${item.DS1}`).up()
           .ele('KSG_KPG')
-            .ele('N_KSG').txt(`${item.N_KSG}`).up()
-            .ele('GR').txt(`${item.GR}`).up()
+            .ele('N_KSG').txt(`${item.F_MES_CODE}`).up()
+            .ele('GR').txt(``).up()
             .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
             .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
             .ele('SL_K').txt(`${item.SL_K}`).up()
-            .ele('IT_SL').txt(`${item.kslp}`).up()
+            .ele('IT_SL').txt(`${item.F_C_KSLP}`).up()
           .up()
           .ele('DZP').txt(1).up()
           .ele('TARIF').txt(`${item.SUMV}`).up()
@@ -228,23 +224,23 @@ export default (coll) => {
       .up()
 
     root.ele('ZAP').import(frag);
-    if (cod) {
+    if (F_CR_SERVICE_CODE) {
       const fragUsl = fragment()
         .ele('USL')
-          .ele('IDSERV').txt(`${item.IDCASE}_1`).up()
-          .ele('VID_VME').txt(`${item.cod}`).up()
+          .ele('IDSERV').txt(`1`).up()
+          .ele('VID_VME').txt(`${item.F_CR_SERVICE_CODE}`).up()
         .up()
         .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
       root.last().last().last().prev().import(fragUsl);
     }
     if (SL_K === 1) {
-      const IDSL = kslp === 1.1 ? 1 : 8;
+      const IDSL = F_C_KSLP === 0.2 ? 1 : 8;
       const fragKSLP = fragment()
         .ele('SL_KOEF')
           .ele('IDSL').txt(`${IDSL}`).up()
-          .ele('Z_SL').txt(kslp).up()
+          .ele('Z_SL').txt(F_C_KSLP).up()
         .up();
-      if (cod) {
+      if (F_CR_SERVICE_CODE) {
         root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
       } else {
         root.last().last().last().prev().last().prev().prev().import(fragKSLP);
@@ -252,7 +248,6 @@ export default (coll) => {
     }
     if (ENP) {
       const fragPol = fragment()
-        .ele('VPOLIS').txt(1).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -284,7 +279,6 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
-        .ele('VPOLIS').txt(1).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()

@@ -271,7 +271,7 @@ st.fio,
 st.patient,
 st.id,
 st.c_i,
-wi.f_mkb10_code dds,
+st.dds,
 st.dr,
 st.w,
 st.s_pol,
@@ -280,22 +280,28 @@ st.c_t,
 st.usl_ok,
 st.in_date,
 st.out_date,
-st.org,
-st.org_code,
+st.org podr_name,
+st.org_code podr,
 st.final_code,
 st.age,
-wi.f_mes_code,
-wi.f_mes_name,
-wi.f_ksg_num,
-wi.f_c_kslp,
-nvl(wi.f_mes_summ, wi.f_mes_price) f_mes_summ,
-wi.f_cr_service_code,
+st.f_mes_code,
+st.f_mes_name,
+st.f_ksg_num,
+st.f_c_kslp,
+st.f_mes_summ,
+st.f_kz,
+st.f_cdiff,
+st.f_cspec,
+st.f_cpriv,
+st.f_zp,
+st.f_base,
+st.f_c_duration_case,
+st.f_cr_service_code,
 tal.talon_num tal_num,
 tal.talon_date tal_d
-from st.interin_kst st
+from st.interin_ksg st
 inner join  a.t_smh_plans tal on tal.t_med_chrt_id = st.id
-where tal.talon_num is not null and st.c_i in ('2022_197', '2022_329', '2022_39')
-`;
+where tal.talon_num is not null`;
 
 export const vmpReq = `select 
 v.patient,
@@ -303,21 +309,23 @@ v.id,
 v.fio,
 v.c_i,
 v.dds,
+v.dr,
 v.w,
 v.s_pol,
 v.sn_pol,
 v.c_t,
 v.usl_ok,
+v.vpolis,
 v.cod,
 v.in_date,
 v.out_date,
-v.org,
-v.org_code,
-v.final_code
+v.org podr_name,
+v.org_code podr,
+v.final_code,
 v.age,
 tal.talon_num tal_num,
 tal.talon_date tal_d
-from st.ksg_list_v v inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and tal.talon_num is not null `
+from st.ksg_list_v v inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and tal.talon_num is not null  `
 
 export const ksg = `select 
 st.fio,
@@ -343,7 +351,7 @@ wi.f_ksg_num,
 wi.f_c_kslp,
 nvl(wi.f_mes_summ, wi.f_mes_price) f_mes_summ,
 wi.f_cr_service_code,
-from st.interin_kst st`
+from st.interin_ksg st`
 
 export const ffoms = {
   rmp: xml,

@@ -3,8 +3,6 @@ import interinController from './controller/interinController';
 import { allUsl } from './controller/index';
 import { allUsl as allDayUsl } from './controller/ds';
 
-const vmpCodes = ['200409', '200510', '200518', '200519', '200520', '200524', '200522', '200523', '200570', '200525', '200530'];
-
 const checkPATOLOGY = (item, kslp) => {
   const { diab, hiv, hyper } = kslp;
   if(find(diab, {C_I: item.C_I})){
@@ -22,15 +20,7 @@ export default async (data, kslp) => {
   const interinCodes = await interinController();
   const hospServList = await allUsl();
   const dayServList = await allDayUsl();
-  const splitOmsData = data.reduce((acc, item) => {
-    vmpCodes.includes(item.COD) ? acc.vmpList.push(item) : acc.ksgList.push(item);
-    return acc;
-  }, { vmpList: [], ksgList: [] });
-  const { ksgList, vmpList } = splitOmsData;
-  const vmp = vmpList.map((item) => {
-    return item;
-  });
-  const ksg = ksgList.map((item) => {
+  const ksg = data.map((item) => {
     checkPATOLOGY(item, kslp)
     const calculateDays = Math.round((item.OUT_DATE.getTime() - item.IN_DATE.getTime()) / (24 * 3600 * 1000));
     if (parseInt(item.C_I.slice(5)) >= 30000) {
@@ -56,5 +46,5 @@ export default async (data, kslp) => {
     item.DIFF_CRITERIA = '';
     return item;
   }).filter((item) => item.DDS !== 'U07.1' && item.DDS !== 'U07.2');
-  return { vmp, ksg };
+  return { ksg };
 };
