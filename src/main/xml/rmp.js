@@ -23,14 +23,14 @@ export default (coll) => {
     .ele('ZGLV')
       .ele('VERSION').txt('1.0').up()
       .ele('DATA').txt(`${format(new Date(), 'yyyy-MM-dd HH:mm:ss')}`).up()
-      .ele('FILENAME').txt(`FM990089F00${format(new Date(), 'yyMMdd')}`).up()
+      .ele('FILENAME').txt(`2022_01_990089_005.xml`).up()
       .ele('SD_Z').txt(Object.values(ksgList).length + Object.values(vmpList).length).up()
     .up()
     .ele('OTPR')
       .ele('CODE_MO').txt(990089).up()
       .ele('YEAR').txt(2022).up()
-      .ele('MONTH').txt(getMonth(new Date()) + 1).up()
-    .ele('DAY').txt(getDate(lastDayOfMonth(new Date()))).up()
+      .ele('MONTH').txt(1).up()
+    .ele('DAY').txt(31).up()
     .up();
 
   Object.values(vmpList).forEach((item) => {
@@ -160,7 +160,7 @@ export default (coll) => {
   });
   Object.values(ksgList).forEach((item) => {
     const {
-      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, PATOLOGY,
+      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2,
     } = item;
     console.log(item)
     const frag = fragment()
@@ -209,6 +209,7 @@ export default (coll) => {
           .ele('NHISTORY').txt(`${item.C_I}`).up()
           .ele('DS_GR').txt(`${item.DS1}`).up()
           .ele('DS1').txt(`${item.DS1}`).up()
+          .ele('DS2').txt(`${F_CR_MKB_CODE2 ? F_CR_MKB_CODE2 : ''}`).up()
           .ele('KSG_KPG')
             .ele('N_KSG').txt(`${item.F_MES_CODE}`).up()
             .ele('GR').txt(``).up()
@@ -308,9 +309,9 @@ export default (coll) => {
         .ele('DOST_P').txt('').up()
       root.last().first().next().next().import(fragPol);
     }
-    // if (PATOLOGY) {
-    //   const fragDS2 = fragment().ele('DS2').txt(`${PATOLOGY}`).up();
-    //   root.last().last().last().import(fragDS2);
+    // if (F_CR_MKB_CODE2) {
+    //   const fragDS2 = fragment().ele('DS2').txt(`${F_CR_MKB_CODE2}`).up();
+    //   root.last().last().last().prev().first().next().next().next().next().next().next().next().import(fragDS2);
     // }
   });
   root
