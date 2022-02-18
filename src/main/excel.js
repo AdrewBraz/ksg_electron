@@ -22,13 +22,12 @@ const sheetBuilder = async (vmp, ksg, workbook) => {
     FIO: 'ФИО',
     DS1: 'Диагноз',
     C_I: 'ИБ',
-    GR: 'Группа',
+    F_KSG_NUM: 'Группа',
     AGE: 'Возраст',
     FINAL_CODE: 'Код Прерывания',
-    cod: 'Услуга',
-    kz: 'Коэффицент затратности',
-    ksgName: 'Название КСГ',
-    N_KSG: 'Код КСГ',
+    F_CR_SERVICE_CODE: 'Услуга',
+    F_MES_NAME: 'Название КСГ',
+    F_MES_CODE: 'Код КСГ',
     SUMV: 'Cумма',
     DATE_Z_1: 'Дата поступления',
     DATE_Z_2: 'Дата выписки',
@@ -52,6 +51,7 @@ const sheetBuilder = async (vmp, ksg, workbook) => {
     acc.push(values);
     return acc;
   }, [])
+  console.log(ksgRows.length)
   const vmpRows = Object.keys(vmp).reduce((acc, item) => {
     const values = Object.keys(vmp[item]).filter((item) => vmpIncludeKeys.includes(item)).map((key) => vmp[item][key]);
     acc.push(values);

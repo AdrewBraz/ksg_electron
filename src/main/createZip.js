@@ -5,11 +5,12 @@ import fs from 'fs';
 
 export default async (xml) => {
     const zip = new AdmZip();
-    const date = format(new Date(), 'yyMMdd');
+    const date = format(new Date(), 'yyyy-MM-dd');
     await createXml(xml, date);
-    const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/2022_01_990089_005.xml`);
+    const [year, month, day ] = date.split('-')
+    const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_990089_${day}.xml`);
     console.log(stat)
-    const add = await zip.addLocalFile(`C:/Users/User/Desktop/Выгрузка ФФОМС/2022_01_990089_005.xml`);
+    const add = await zip.addLocalFile(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_990089_${day}.xml`);
     console.log(add)
     await zip.writeZip(`C:/Users/User/Desktop/Выгрузка ФФОМС/FM990089F00${date}.zip`);
     return true

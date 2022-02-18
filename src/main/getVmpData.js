@@ -31,7 +31,7 @@ export default async (data) => {
   const vmpData = await vmpController();
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID,
+      PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID,
     } = item;
     const obj = vmpData.find((el) => el.ID === (item.COD).toString());
     const { GROUP, PRICE, NAME, NFS } = obj;
@@ -48,6 +48,7 @@ export default async (data) => {
       ENP = SN_POL;
     }
     const { VID_HMP, METOD_HMP, MODEL_HMP, DZP } = hmp;
+    const [FAM, IM, OT ] = FIO.split(' ')
     const RSLT = getRslt(FINAL_CODE);
     const ISHOD = getIshod(RSLT);
     acc[C_I] = {
@@ -55,6 +56,9 @@ export default async (data) => {
       SNPOLIS,
       DR,
       W,
+      FAM,
+      IM,
+      OT: OT ? OT : '',
       ENP,
       AGE,
       POVOD: 3,
@@ -72,8 +76,8 @@ export default async (data) => {
       NFZ: NFS,
       RESH_HMP: 1,
       IDCASE: `${PATIENT}_${C_I}`,
-      ADR_GAR: '271c73e1-90f9-496f-a023-4c9f02800af2',
-      ADR_NAME: utf8_decode('121552, г. Москва, город Москва, УЛИЦА ЧЕРЕПКОВСКАЯ 3-Я, ДОМ 15А'),
+      ADR_GAR: '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc',
+      ADR_NAME: utf8_decode('121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3'),
       DATE_Z_1: IN_DATE,
       DATE_Z_2: OUT_DATE,
       KD_Z: Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000)),

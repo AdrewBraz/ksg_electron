@@ -101,9 +101,9 @@ export default (coll) => {
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
         .ele('NOVOR').txt(0).up()
-        .ele('FAM').txt('').up()
-        .ele('IM').txt('').up()
-        .ele('OT').txt('').up()
+        .ele('FAM').txt(`${item.FAM}`).up()
+        .ele('IM').txt(`${item.IM}`).up()
+        .ele('OT').txt(`${item.OT}`).up()
         .ele('DOST').txt('').up()
         .ele('TEL').txt('').up()
         .ele('MR').txt('').up()
@@ -133,9 +133,9 @@ export default (coll) => {
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
         .ele('NOVOR').txt(0).up()
-        .ele('FAM').txt('').up()
-        .ele('IM').txt('').up()
-        .ele('OT').txt('').up()
+        .ele('FAM').txt(`${item.FAM}`).up()
+        .ele('IM').txt(`${item.IM}`).up()
+        .ele('OT').txt(`${item.OT}`).up()
         .ele('DOST').txt('').up()
         .ele('TEL').txt('').up()
         .ele('MR').txt('').up()
@@ -160,7 +160,7 @@ export default (coll) => {
   });
   Object.values(ksgList).forEach((item) => {
     const {
-      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2,
+      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2, F_CR_PARAM_CODE
     } = item;
     console.log(item)
     const frag = fragment()
@@ -212,7 +212,7 @@ export default (coll) => {
           .ele('DS2').txt(`${F_CR_MKB_CODE2 ? F_CR_MKB_CODE2 : ''}`).up()
           .ele('KSG_KPG')
             .ele('N_KSG').txt(`${item.F_MES_CODE}`).up()
-            .ele('GR').txt(``).up()
+            .ele('GR').txt(`${item.F_KSG_NUM}`).up()
             .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
             .ele('KOEF_Z').txt(`${item.KOEF_Z}`).up()
             .ele('SL_K').txt(`${item.SL_K}`).up()
@@ -225,6 +225,22 @@ export default (coll) => {
       .up()
 
     root.ele('ZAP').import(frag);
+    if (F_CR_PARAM_CODE) {
+      const fragUsl = fragment()
+        .ele('LEK_PR')
+          .ele('DATA_INJ').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
+          .ele('CODE_SH').txt(`${F_CR_PARAM_CODE}`).up()
+          .ele('REGNUM').txt(`${F_CR_PARAM_CODE === 'gibp01' ? '000029' : '002382'}`).up()
+          .ele('LEK_DOSE')
+            .ele('ED_IZM').txt(`10`).up()
+            .ele('DOSE_INJ').txt(`${ F_CR_PARAM_CODE === 'gibp01' ? 10.00 : 140.00}`).up()
+            .ele('METHOD_INJ').txt('39').up()
+            .ele('COL_INJ').txt(1).up()
+          .up()
+        .up()
+        .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
+      root.last().last().last().prev().import(fragUsl);
+    }
     if (F_CR_SERVICE_CODE) {
       const fragUsl = fragment()
         .ele('USL')
@@ -243,9 +259,9 @@ export default (coll) => {
         .up();
       if (F_CR_SERVICE_CODE) {
         root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
-      } else {
-        root.last().last().last().prev().last().prev().prev().import(fragKSLP);
-      }
+      } else if(F_CR_PARAM_CODE) {
+        root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
+      } else root.last().last().last().prev().last().prev().prev().import(fragKSLP);
     }
     if (ENP) {
       const fragPol = fragment()
@@ -255,9 +271,9 @@ export default (coll) => {
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
         .ele('NOVOR').txt(0).up()
-        .ele('FAM').txt('').up()
-        .ele('IM').txt('').up()
-        .ele('OT').txt('').up()
+        .ele('FAM').txt(`${item.FAM}`).up()
+        .ele('IM').txt(`${item.IM}`).up()
+        .ele('OT').txt(`${item.OT}`).up()
         .ele('DOST').txt('').up()
         .ele('TEL').txt('').up()
         .ele('MR').txt('').up()
@@ -286,9 +302,9 @@ export default (coll) => {
         .ele('W').txt(`${item.W}`).up()
         .ele('DR').txt(format(item.DR, 'yyyy-MM-dd')).up()
         .ele('NOVOR').txt(0).up()
-        .ele('FAM').txt('').up()
-        .ele('IM').txt('').up()
-        .ele('OT').txt('').up()
+        .ele('FAM').txt(`${item.FAM}`).up()
+        .ele('IM').txt(`${item.IM}`).up()
+        .ele('OT').txt(`${item.OT}`).up()
         .ele('DOST').txt('').up()
         .ele('TEL').txt('').up()
         .ele('MR').txt('').up()

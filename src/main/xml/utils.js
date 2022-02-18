@@ -56,11 +56,11 @@ const getPrev = (final, days, group = '') => {
 };
 
 const getProfil = (group) => {
-  if ([232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243].includes(group) === true) {
+  if (['st25.001', 'st25.002', 'st25.003', 'st25.004', 'st25.005', 'st25.006', 'st25.007', 'st25.008', 'st25.009', 'st25.010', 'st25.011', 'st25.012', 'ds25.001', 'ds25.002', 'ds25.003' ].includes(group) === true) {
     return 81;
-  } if ([76, 77, 78, 79, 80, 81, 82, 83, 84, 35, 36].includes(group) === true) {
+  } if ([ 'st13.001', 'st13.002', 'st13.003', 'st13.004','st13.005' ,'st13.006' ,'st13.007' ,'st13.008' ,'st13.009' ,'st13.010', 'ds13.001' ,'ds13.002' ,'ds13.003', 'ds36.017', 'ds36.018', 'ds36.019'].includes(group) === true) {
     return 29;
-  } if ([249, 250, 251, 252, 253].includes(group)) {
+  } if (['st27.005', 'st27.006', 'st27.007', 'st27.008', 'st27.009'].includes(group)) {
     return 97;
   }
   return 77;
