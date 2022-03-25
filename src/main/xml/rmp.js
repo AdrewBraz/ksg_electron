@@ -95,6 +95,7 @@ export default (coll) => {
     const { ENP, SNPOLIS } = item;
     if (ENP) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(`${item.VPOLIS}`).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -127,6 +128,7 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(`${item.VPOLIS}`).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -265,6 +267,7 @@ export default (coll) => {
     }
     if (ENP) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(`${item.VPOLIS}`).up()
         .ele('ENP').txt(`${ENP}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()
@@ -296,6 +299,7 @@ export default (coll) => {
     }
     if (SNPOLIS) {
       const fragPol = fragment()
+        .ele('VPOLIS').txt(`${item.VPOLIS}`).up()
         .ele('SNPOLIS').txt(`${SNPOLIS}`).up()
         .ele('SMO_OK').txt('').up()
         .ele('SMO').txt('').up()

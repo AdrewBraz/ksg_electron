@@ -28,6 +28,7 @@ export default async (list) => {
         AP_ID, PATIENT, AP_TYPE, D_NAP, DS_NAP, ORGAN,
       } = item;
       const N_NAP = item.N_NAP ? item.N_NAP.replace(/\./g, '') : '""';
+      console.log(N_NAP, item)
       return {
         AP_ID: AP_ID || '',
         PATIENT: PATIENT ? `${PATIENT}` : '',
@@ -40,7 +41,7 @@ export default async (list) => {
       };
     });
 
-  const dbf = await DBFFile.create(`${__dirname}/AP.dbf`, fieldDescriptors);
+  const dbf = await DBFFile.create(`C:/Users/User/Desktop/Мегаклиника/AP.dbf`, fieldDescriptors);
   console.log('DBF file created.');
   await dbf.appendRecords(records);
   console.log(`${records.length} records added.`);

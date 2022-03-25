@@ -62,6 +62,5 @@ export default async (list) => {
   const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/MU.dbf', fieldDescriptors, { encoding: 'cp866' });
   console.log('DBF file created.');
   await dbf.appendRecords(records);
-  await DBFFile.open(`${__dirname}/MU.dbf`, { encoding: 'win1251' });
   console.log(`${records.length} records added.`);
 };
