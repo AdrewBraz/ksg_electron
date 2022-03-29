@@ -22,13 +22,13 @@ const config = {
   password: 'novlv',
   connectString: '172.16.11.23:1521/promis35',
 };
-const uri = 'mongodb://nmic:nmic414@cluster0-shard-00-00.ps4d4.mongodb.net:27017,cluster0-shard-00-01.ps4d4.mongodb.net:27017,cluster0-shard-00-02.ps4d4.mongodb.net:27017/ksg?ssl=true&replicaSet=atlas-5qaoil-shard-0&authSource=admin&retryWrites=true&w=majority';
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).catch(err => console.log)
+// const uri = 'mongodb://nmic:nmic414@cluster0-shard-00-00.ps4d4.mongodb.net:27017,cluster0-shard-00-01.ps4d4.mongodb.net:27017,cluster0-shard-00-02.ps4d4.mongodb.net:27017/ksg?ssl=true&replicaSet=atlas-5qaoil-shard-0&authSource=admin&retryWrites=true&w=majority';
+// mongoose.connect(uri, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// }).catch(err => console.log)
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
@@ -99,11 +99,12 @@ const db = mongoose.connection;
       show: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
+        webSecurity: false,
         preload: path.join(app.getAppPath(), '../preload', 'ui-bundle.js')
       }
     })
     // and load the index.html of the app.
-    win.webContents.loadFile('../renderer/index.html')
+    win.webContents.loadFile( path.join(__dirname, '../renderer/index.html'))
     win.webContents.openDevTools()
     win.on('ready-to-show', () => {
       win.show()

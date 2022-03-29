@@ -1,40 +1,38 @@
-import vmpController from './controller/vmpController';
 import { getRslt, getIshod, utf8_decode } from './xml/utils';
 
 const vHmp = [{
-  GROUP: 42, VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168, DZP: 0.47
+  GROUP: 42, COD: '200530', VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168, DZP: 0.47, NAME: "баллонная вазодилатация с установкой 1 - 3 стентов в сосуд (сосуды)", NFS: 167220, PRICE: 222471.16  
 }, {
-  GROUP: 36, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21166, DZP: 0.55
+  GROUP: 36, COD: '200518', VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21166, DZP: 0.55, NAME: "баллонная вазодилатация с установкой 1 стента в сосуд (сосуды)", NFS: 172649, PRICE: 240617.46  
 }, {
-  GROUP: 37, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21166, DZP: 0.48
+  GROUP: 37, COD: '200519', VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21166, DZP: 0.48, NAME: "баллонная вазодилатация с установкой 2 стентов в сосуд (сосуды)", NFS: 200591, PRICE: 269688.58  
 }, {
-  GROUP: 38, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21166, DZP: 0.42
+  GROUP: 38, COD: '200520', VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21166, DZP: 0.42, NAME: "баллонная вазодилатация с установкой 3 стентов в сосуд (сосуды)", NFS: 228440, PRICE: 297495.13
 }, {
-  GROUP: 39, VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21167, DZP: 0.53
+  GROUP: 39, COD: '200522', VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21167, DZP: 0.53, NAME: "баллонная вазодилатация с установкой 1 стента в сосуд (сосуды)", NFS: 128489, PRICE: 177268 
 }, {
-  GROUP: 40, VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21167, DZP: 0.45
+  GROUP: 40, COD: '200523', VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21167, DZP: 0.45, NAME: "баллонная вазодилатация с установкой 2 стентов в сосуд (сосуды)", NFS: 156482, PRICE: 205985.08 
 }, {
-  GROUP: 41, VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167, DZP: 0.33
+  GROUP: 41, COD: '200524', VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167, DZP: 0.33, NAME: "баллонная вазодилатация с установкой 3 стентов в сосуд (сосуды)", NFS: 196645, PRICE: 243647.09
 }, {
-  GROUP: 44, VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17
+  GROUP: 44, COD: '200409', VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17, NAME: "имплантация частотноадаптированного однокамерного кардиостимулятора", NFS: 152912, PRICE: 171186.51
 }, {
-  GROUP: 46, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.36
+  GROUP: 46, COD: '200510', VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.36, NAME: "имплантация частотноадаптированного двухкамерного кардиостимулятора", NFS: 225385, PRICE: 284009.89
 }, {
-  GROUP: 48, VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.51
+  GROUP: 48, COD: '200525', VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.51, NAME: "аортокоронарное шунтирование у больных ишемической болезнью сердца в условиях искусственного кровоснабжения", NFS: 387407, PRICE: 529027.5
 },
 {
-  GROUP: 43, VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24
+  GROUP: 43, COD: '200570', VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24, NAME: "баллонная вазодилятация и/или стентирование с установкой 1-3 стентов в сосуд с применением методов внутрисосудистой визуализации и/или в сочетании с оценкой гемодинамической значимости стеноза по данным физиологической оценки коронарного кровотока (ФРК или МРК) при ишемической болезни сердца", NFS: 330593, PRICE: 386370.65 
 },
 ];
 
 export default async (data) => {
-  const vmpData = await vmpController();
   const result = data.reduce((acc, item) => {
     const {
       PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID,
     } = item;
-    const obj = vmpData.find((el) => el.ID === (item.COD).toString());
-    const { GROUP, PRICE, NAME, NFS } = obj;
+    const obj = vHmp.find((el) => el.COD === (item.COD).toString());
+    const { VID_HMP, METOD_HMP, MODEL_HMP, DZP, GROUP, PRICE, NAME, NFS } = obj;
     const hmp = vHmp.find((el) => el.GROUP === GROUP);
     let SNPOLIS; let
       ENP;
@@ -47,7 +45,6 @@ export default async (data) => {
     } else {
       ENP = SN_POL;
     }
-    const { VID_HMP, METOD_HMP, MODEL_HMP, DZP } = hmp;
     const [FAM, IM, OT ] = FIO.split(' ')
     const RSLT = getRslt(FINAL_CODE);
     const ISHOD = getIshod(RSLT);
