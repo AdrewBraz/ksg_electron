@@ -29,8 +29,11 @@ const vHmp = [{
 export default async (data) => {
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID,
+      PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID, JSON_DATA
     } = item;
+    if(JSON_DATA){
+      console.log(JSON_DATA)
+    }
     const obj = vHmp.find((el) => el.COD === (item.COD).toString());
     const { VID_HMP, METOD_HMP, MODEL_HMP, DZP, GROUP, PRICE, NAME, NFS } = obj;
     const hmp = vHmp.find((el) => el.GROUP === GROUP);

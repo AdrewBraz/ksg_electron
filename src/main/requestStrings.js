@@ -332,8 +332,11 @@ v.org_code podr,
 v.final_code,
 v.age,
 tal.talon_num tal_num,
-tal.talon_date tal_d
-from st.ksg_list_v v inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%'`
+tal.talon_date tal_d,
+f.json_data
+from st.ksg_list_v v 
+left join ( select parent_id, json_data from wi.xs$fd where doc_type='FD.PROTOCOL_IMPLANTS' and status <99) f on v.id = f.parent_id
+inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and v.channel not like 'Городская скорая помощь'`
 
 export const ksg = `select 
 st.fio,
@@ -367,7 +370,8 @@ st.f_zp,
 st.f_base,
 decode(st.F_CR_MKB_CODE2, null, '', st.F_CR_MKB_CODE2) F_CR_MKB_CODE2,
 decode(st.F_CR_PARAM_CODE, 'pbt', 'gibp30', st.F_CR_PARAM_CODE) F_CR_PARAM_CODE,
-st.f_c_duration_case
+st.f_c_duration_case,
+st.json_data
 from st.interin_ksg st`
 
 export const ffoms = {

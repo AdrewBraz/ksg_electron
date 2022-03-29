@@ -6,8 +6,11 @@ export default (data) => {
     return data.map(item => {
         const {
             PATIENT, FIO, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL,  DDS, F_C_KSLP, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID, F_MES_CODE, F_MES_SUMM, F_KSG_NUM, F_KZ, F_CDIFF, F_CSPEC, F_CPRIV, F_BASE, F_C_DURATION_CASE,
-            F_ZP
+            F_ZP, JSON_DATA
         } = item;
+        if(JSON_DATA){
+          console.log(JSON_DATA.ROWS)
+        }
         const [ FAM, IM, OT] = FIO.split(' ')
         const calculateDays = Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000));
         const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
