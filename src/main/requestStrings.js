@@ -240,10 +240,11 @@ const adr = `select * from oms_pat_adr adr inner join oms_pat_pol pol on adr.pat
 const pat = `select * from oms_pat pat inner join oms_pat_pol pol on pat.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
 const history = `select * from oms_pat_mk mk inner join oms_pat_pol pol on mk.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
 const amb = `select * from oms_pat_srv srv inner join oms_pat_pol pol on srv.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
-const move = `select move.fio_pat, move.patient, move.c_i, move.org_type, move.org_pat, move.cod_u, move.fio_sot, move.d_b, move.kind, move.dds, move.cod, move.prog, move.tip, move.d_type, move.mcod, move.code, move.result, move.h_pays, move.h_date 
+const move = `select move.fio_pat, move.patient, move.c_i, move.org_type, move.org_pat, decode(move.org_type, 'R', dr.cod_u, move.cod_u) cod_u, decode(move.org_type, 'R', dr.fio_sot, move.fio_sot) fio_sot, move.d_b, move.kind, move.dds, move.cod, move.prog, move.tip, move.d_type, move.mcod, move.code, move.result, move.h_pays, move.h_date 
 from oms_pat_move move
 inner join st.ksg_list list on list.patient = move.patient
-where list.channel like 'Городская скорая помощь' and move.cod not in ('200530', '200409', '200510', '200525')`;
+inner join st.voms_dr dr on dr.c_i = move.c_i
+where list.channel like 'Городская скорая помощь'`;
 const talons = `select CONCAT(move.patient, move.c_i) AP_ID,
 move.patient,
 '4' AP_TYPE, 
@@ -303,7 +304,8 @@ decode(st.F_CR_PARAM_CODE, 'pbt', 'gibp30', st.F_CR_PARAM_CODE) F_CR_PARAM_CODE,
 st.f_c_duration_case,
 st.f_cr_service_code,
 tal.talon_num tal_num,
-tal.talon_date tal_d
+tal.talon_date tal_d,
+st.json_data
 from st.interin_ksg st
 inner join  a.t_smh_plans tal on tal.t_med_chrt_id = st.id
 where tal.talon_num is not null`;
@@ -336,7 +338,7 @@ tal.talon_date tal_d,
 f.json_data
 from st.ksg_list_v v 
 left join ( select parent_id, json_data from wi.xs$fd where doc_type='FD.PROTOCOL_IMPLANTS' and status <99) f on v.id = f.parent_id
-inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and v.channel not like 'Городская скорая помощь'`
+inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and v.channel not like 'Городская скорая помощь' and tal.talon_num is not null`
 
 export const ksg = `select 
 st.fio,

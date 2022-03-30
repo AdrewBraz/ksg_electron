@@ -1,6 +1,7 @@
 import {
     getRslt, getIshod, getProfil, getPrev,
   } from './xml/utils';
+import { DayCalculation } from './utils/utils.js'
 
 export default (data) => {
     return data.map(item => {
@@ -9,10 +10,10 @@ export default (data) => {
             F_ZP, JSON_DATA
         } = item;
         if(JSON_DATA){
-          console.log(JSON_DATA.ROWS)
+          console.log(JSON.parse(JSON_DATA).ROWS)
         }
         const [ FAM, IM, OT] = FIO.split(' ')
-        const calculateDays = Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000));
+        const calculateDays = DayCalculation(OUT_DATE, IN_DATE);
         const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
         let SNPOLIS; let
       ENP;
@@ -58,7 +59,7 @@ export default (data) => {
             ADR_NAME: '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3',
             DATE_Z_1: IN_DATE,
             DATE_Z_2: OUT_DATE,
-            KD_Z: item.DAYS,
+            KD_Z: DAYS,
             RSLT,
             ISHOD,
             IS_PRERV: F_KSG_NUM === 235 ? getPrev(RSLT, DAYS, F_MES_CODE) : getPrev(RSLT, DAYS),

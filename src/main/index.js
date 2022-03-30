@@ -17,6 +17,7 @@ import { medicalServList } from './utils/dbfUtils';
 import compare from './compareLists'
 
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+oracledb.fetchAsString = [ oracledb.CLOB ];
 const config = {
   user: 'OK',
   password: 'novlv',

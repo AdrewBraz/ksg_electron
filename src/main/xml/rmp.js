@@ -87,12 +87,11 @@ export default (coll) => {
           .ele('DZP').txt(`${item.DZP}`).up()
           .ele('NFZ').txt(`${item.NFZ}`).up()
           .ele('TARIF').txt(`${item.SUMV}`).up()
-          .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
         .up()
       .up();
 
     root.ele('ZAP').import(frag);
-    const { ENP, SNPOLIS } = item;
+    const { ENP, SNPOLIS, JSON_DATA } = item;
     if (ENP) {
       const fragPol = fragment()
         .ele('VPOLIS').txt(`${item.VPOLIS}`).up()
@@ -159,12 +158,29 @@ export default (coll) => {
       root.last().first().next().next()
         .import(fragPol);
     }
+    if(JSON_DATA){
+      const rows = JSON.parse(JSON_DATA).ROWS;
+      const UslFrag = fragment().ele('USL')
+        .ele('IDSERV').txt('1').up()
+        .ele('VID_VME').txt('').up()
+      .up()
+      .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
+      rows.forEach(element => {
+        const MedDevFrag = fragment().ele('MED_DEV')
+          .ele('DATE_MED').txt(`${element.DATE_MED}`).up()
+          .ele('CODE_MEDDEV').txt(`${element.CODE_MEDDEV}`).up()
+          .ele('NUMBER_SER').txt(`${element.NUMBER_SER}`).up()
+        .up()
+        UslFrag.last().prev().import(MedDevFrag)
+      });
+      root.last().last().last().import(UslFrag); 
+    }
   });
   Object.values(ksgList).forEach((item) => {
     const {
-      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2, F_CR_PARAM_CODE
+      ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2, F_CR_PARAM_CODE, JSON_DATA
     } = item;
-    console.log(item)
+    console.log(item.KD_Z)
     const frag = fragment()
     .ele('N_ZAP').txt(counter.getNext()).up()
     .ele('TYPE').txt('PRIL4').up()
@@ -250,6 +266,17 @@ export default (coll) => {
           .ele('VID_VME').txt(`${item.F_CR_SERVICE_CODE}`).up()
         .up()
         .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
+        if(JSON_DATA){
+          const rows = JSON.parse(JSON_DATA).ROWS;
+          rows.forEach(element => {
+            const MedDevFrag = fragment().ele('MED_DEV')
+              .ele('DATE_MED').txt(`${element.DATE_MED}`).up()
+              .ele('CODE_MEDDEV').txt(`${element.CODE_MEDDEV}`).up()
+              .ele('NUMBER_SER').txt(`${element.NUMBER_SER}`).up()
+            .up()
+            fragUsl.last().prev().import(MedDevFrag)
+          });
+        }
       root.last().last().last().prev().import(fragUsl);
     }
     if (SL_K === 1) {

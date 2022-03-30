@@ -1,4 +1,5 @@
 import { getRslt, getIshod, utf8_decode } from './xml/utils';
+import { DayCalculation } from './utils/utils.js'
 
 const vHmp = [{
   GROUP: 42, COD: '200530', VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168, DZP: 0.47, NAME: "баллонная вазодилатация с установкой 1 - 3 стентов в сосуд (сосуды)", NFS: 167220, PRICE: 222471.16  
@@ -29,11 +30,8 @@ const vHmp = [{
 export default async (data) => {
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, FIO, C_T, C_I, DR, W, S_POL, SN_POL, DDS, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID, JSON_DATA
+      PATIENT, FIO, C_I, S_POL, SN_POL, DDS, IN_DATE, OUT_DATE, FINAL_CODE, ID, JSON_DATA
     } = item;
-    if(JSON_DATA){
-      console.log(JSON_DATA)
-    }
     const obj = vHmp.find((el) => el.COD === (item.COD).toString());
     const { VID_HMP, METOD_HMP, MODEL_HMP, DZP, GROUP, PRICE, NAME, NFS } = obj;
     const hmp = vHmp.find((el) => el.GROUP === GROUP);
@@ -54,13 +52,10 @@ export default async (data) => {
     acc[C_I] = {
       IDNPR: `${PATIENT}_${ID}`,
       SNPOLIS,
-      DR,
-      W,
       FAM,
       IM,
       OT: OT ? OT : '',
       ENP,
-      AGE,
       POVOD: 3,
       C_I,
       DS1: DDS,
@@ -80,13 +75,12 @@ export default async (data) => {
       ADR_NAME: utf8_decode('121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3'),
       DATE_Z_1: IN_DATE,
       DATE_Z_2: OUT_DATE,
-      KD_Z: Math.round((OUT_DATE.getTime() - IN_DATE.getTime()) / (24 * 3600 * 1000)),
+      KD_Z: DayCalculation(OUT_DATE, IN_DATE),
       RSLT,
       ISHOD,
       IS_PRERV: 0,
       SUMV: PRICE,
       NAME,
-      C_T,
       ...item
     };
     return acc;
