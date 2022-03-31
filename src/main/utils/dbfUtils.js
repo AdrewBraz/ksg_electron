@@ -1,5 +1,5 @@
 import { findIndex } from 'lodash';
-import { makeCounter } from 'utils'
+// import { makeCounter } from 'utils'
 
 const reg = new RegExp(/\w\d\d$/);
 const replaceDs = (ds) => (ds === 'I10' ? ds : ds.replace(reg, '$&.0'));
@@ -93,18 +93,12 @@ const getICUCode = (days) => {
 }
 
 const getHospList = (list) => {
-  let out_date;
-  let out_time;
-  let currentPatient;
-  let moveNum
-  return list.map((item, i) => {
-    if(currentPatient === item.PATIENT){
-
+  return list.map((item, i, arr) => {
+    if(item.PATIENT === arr[i+1].PATIENT){
+      console.log(item, arr[i+1])
+       console.log(item.D_B, arr[i+1].D_B)
     }
-    currentPatient = item.PATIENT
-    moveNum = 1
-    return { PATIENT, C_I, }
   })
 }
 
-export { medicalServList };
+export { medicalServList, getHospList };

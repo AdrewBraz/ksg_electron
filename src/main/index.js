@@ -3,7 +3,6 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
 import oracledb from 'oracledb';
 import fs from 'fs';
-import mongoose from 'mongoose';
 import getPreparedData from './getPreparedData';
 import excel from './excel';
 import doms from './xml/doms';
@@ -23,14 +22,6 @@ const config = {
   password: 'novlv',
   connectString: '172.16.11.23:1521/promis35',
 };
-// const uri = 'mongodb://nmic:nmic414@cluster0-shard-00-00.ps4d4.mongodb.net:27017,cluster0-shard-00-01.ps4d4.mongodb.net:27017,cluster0-shard-00-02.ps4d4.mongodb.net:27017/ksg?ssl=true&replicaSet=atlas-5qaoil-shard-0&authSource=admin&retryWrites=true&w=majority';
-// mongoose.connect(uri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// }).catch(err => console.log)
-
-// const db = mongoose.connection;
-
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
     const requestString = ffoms[id];

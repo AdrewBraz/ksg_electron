@@ -5,6 +5,7 @@ import createPA from './createPA';
 import createDU from './createDU';
 import createMU from './createMU';
 import createMB from './createMB';
+import createDV from './createDV';
 
 export default {
   PO: createPO,
@@ -13,4 +14,5 @@ export default {
   DU: createDU,
   MU: createMU,
   MB: createMB,
+  DV: createDV,
 };
