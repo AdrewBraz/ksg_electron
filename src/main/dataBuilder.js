@@ -1,6 +1,4 @@
 import { uniqBy } from 'lodash';
-import { listDsController, listUslController } from './controller';
-import { listDsController as dailyDsList, listUslController as dailyUslList } from './controller/ds';
 import { getRatio, calculateKsg, calculateKslp } from './ksg';
 import {
   getRslt, getIshod, getProfil, getPrev,

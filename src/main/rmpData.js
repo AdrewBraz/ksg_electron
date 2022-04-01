@@ -13,7 +13,7 @@ export default (data) => {
           console.log(JSON.parse(JSON_DATA).ROWS)
         }
         const [ FAM, IM, OT] = FIO.split(' ')
-        const calculateDays = DayCalculation(OUT_DATE, IN_DATE);
+        const calculateDays = DayCalculation(IN_DATE, OUT_DATE);
         const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
         let SNPOLIS; let
       ENP;

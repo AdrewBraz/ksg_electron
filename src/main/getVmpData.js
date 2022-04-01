@@ -75,7 +75,7 @@ export default async (data) => {
       ADR_NAME: utf8_decode('121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3'),
       DATE_Z_1: IN_DATE,
       DATE_Z_2: OUT_DATE,
-      KD_Z: DayCalculation(OUT_DATE, IN_DATE),
+      KD_Z: DayCalculation(IN_DATE, OUT_DATE),
       RSLT,
       ISHOD,
       IS_PRERV: 0,
