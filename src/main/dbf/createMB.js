@@ -25,28 +25,28 @@ export default async (list) => {
 
   const records = list.map((item) => {
     const {
-      PATIENT, C_I,
+      PATIENT, C_I, T_CI, ISHOD, RSLT, H_TYP, DS_P, PROG, DORD_N, AP_ID, VMPAP_ID
     } = item;
 
     return {
       PATIENT: `${PATIENT}`,
       C_I: `${C_I}`,
-      T_CI: '01',
+      T_CI,
       MB_STAT: '01',
-      DORD_N: '',
-      AP_ID: '',
-      H_TYP: '',
+      DORD_N: DORD_N ? DORD_N : '',
+      AP_ID: AP_ID ? AP_ID : '',
+      H_TYP,
       SRC: '10',
       ORD: '4',
-      ISHOD: '',
-      RSLT: '',
-      PROG: '',
+      ISHOD,
+      RSLT,
+      PROG,
       TRAVMA: '',
-      DS_P: '',
-      DS: '',
+      DS_P,
+      DS: DS_P,
       DS_S: '',
       DS_0: '',
-      VMPAP_ID: '',
+      VMPAP_ID: VMPAP_ID ? VMPAP_ID : '',
       CHD: new Date(),
     };
   });

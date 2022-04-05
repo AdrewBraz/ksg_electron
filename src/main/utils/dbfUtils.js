@@ -1,5 +1,5 @@
 import { findIndex } from 'lodash';
-// import { makeCounter } from 'utils'
+import { DayCalculation } from './utils.js'
 
 const reg = new RegExp(/\w\d\d$/);
 const replaceDs = (ds) => (ds === 'I10' ? ds : ds.replace(reg, '$&.0'));
@@ -75,6 +75,8 @@ const medicalServList = (list, interin) => {
   return l2;
 };
 
+const ICUOrg = ['201', '203', '215', '211'];
+
 const getICUCode = (days) => {
   switch (days) {
     case days <= 2:
@@ -93,12 +95,31 @@ const getICUCode = (days) => {
 }
 
 const getHospList = (list) => {
-  return list.map((item, i, arr) => {
-    if(item.PATIENT === arr[i+1].PATIENT){
-      console.log(item, arr[i+1])
-       console.log(item.D_B, arr[i+1].D_B)
+  let state = '';
+  let count = 1;
+  return list.reduce((acc, item, i) => {
+    const { PATIENT, C_I, COD_U, D_B, D_TIME, DDS, COD, PROG, TIP, D_TYPE, MCOD, CODE, RESULT } = item;
+    if(item.KIND === 'ПОЛОЖЕН'){
+      count = 1;
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: '', PROG, TIP, D_TYPE, MCOD, CODE };
+      count = count + 1;
+      acc.push(obj)
+      return acc
+    } else if(item.KIND === 'ПЕРЕВЕДЕН'){
+      acc[acc.length - 1].D_U = D_B;
+      acc[acc.length - 1].T_U = D_TIME;
+      acc[acc.length - 1].COD = getICUCode(acc[acc.length - 1].K_U);
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: '', PROG, TIP, D_TYPE, MCOD, CODE };
+      count = count + 1;
+      acc.push(obj)
+      return acc
+    } else if(item.KIND === 'ВЫПИСАН'){
+      acc[acc.length - 1].D_U = D_B;
+      acc[acc.length - 1].T_U = D_TIME;
+      acc[acc.length - 1].K_U = 0
+      return acc;
     }
-  })
+  }, [])
 }
 
 export { medicalServList, getHospList };

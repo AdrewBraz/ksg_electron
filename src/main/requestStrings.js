@@ -234,17 +234,23 @@ where list.cod in ('200530', '200525', '200409', '200510')
 where oms.id not in (select id from st.interin_ksg)
 `;
 
-const doc = `select * from oms_pat_doc doc inner join oms_pat_pol pol on doc.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
+const doc = `select * from oms_pat_doc doc inner join oms_pat_pol pol on doc.patient = pol.patient`;
 const pol = `select * from oms_pat_pol where sn_pol is not null and patient not like '33356'`;
-const adr = `select * from oms_pat_adr adr inner join oms_pat_pol pol on adr.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
-const pat = `select * from oms_pat pat inner join oms_pat_pol pol on pat.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
-const history = `select * from oms_pat_mk mk inner join oms_pat_pol pol on mk.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
-const amb = `select * from oms_pat_srv srv inner join oms_pat_pol pol on srv.patient = pol.patient where pol.sn_pol is not null and pol.patient not like '33356'`;
+const adr = `select * from oms_pat_adr adr inner join oms_pat_pol pol on adr.patient = pol.patient`;
+const pat = `select * from oms_pat pat inner join oms_pat_pol pol on pat.patient = pol.patient `;
+const history = `select mk.fio, mk.patient, mk.c_i, mk.t_ci, mk.mb_stat, decode(tal.talon_num, null, '', concat(mk.patient, mk.c_i)) ap_id, mk.h_typ, mk.src, mk.ord, mk.ishod, mk.rslt, mk.prog, mk.travma, mk.ds_p, mk.ds, mk.ds_s, mk.ds_o, smp.dord_n,
+decode(tal.talon_num, null, '', concat(mk.patient, mk.c_i)) vmpap_id
+from oms_pat_mk mk
+inner join oms_pat_pol pol on mk.patient = pol.patient
+left join smp_num smp on mk.med_id = smp.med_id 
+left join a.t_smh_plans tal on smp.med_id = tal.t_med_chrt_id`;
+const amb = `select * from oms_pat_srv srv inner join oms_pat_pol pol on srv.patient = pol.patient`;
 const move = `select move.fio_pat, move.patient, move.c_i, move.org_type, move.org_pat, decode(move.org_type, 'R', dr.cod_u, move.cod_u) cod_u, decode(move.org_type, 'R', dr.fio_sot, move.fio_sot) fio_sot, to_date(move.d_b, 'dd.mm.yy') d_b, to_char(move.d_b, 'HH24:MI') d_time, move.kind, move.dds, move.cod, move.prog, move.tip, move.d_type, move.mcod, move.code, move.result, move.h_pays, move.h_date 
 from oms_pat_move move
 inner join st.ksg_list list on list.patient = move.patient
 inner join st.voms_dr dr on dr.c_i = move.c_i
-where list.channel like 'Городская скорая помощь'`;
+where list.channel like 'Городская скорая помощь'
+order by c_i, d_b, d_time`;
 const talons = `select CONCAT(move.patient, move.c_i) AP_ID,
 move.patient,
 '4' AP_TYPE, 
@@ -254,18 +260,19 @@ move.dds DS_NAP,
 '0371001' ORGAN
 from voms_st move
 inner join st.ksg_list list on list.patient = move.patient
-left join smp_num smp on move.c_i = smp.c_i
+left join smp_num smp on move.med_id = smp.med_id
 left join a.t_smh_plans talons on talons.t_med_chrt_id = smp.med_id
-where list.channel like 'Городская скорая помощь' and move.cod not in ('200530', '200409', '200510', '200525')`;
+where list.channel like 'Городская скорая помощь'`;
 
 export const listOfOmsRequests = [
-  { name: 'PO', req: pol },
-  { name: 'AD', req: adr },
-  { name: 'PA', req: pat },
-  { name: 'DU', req: doc },
-  { name: 'MU', req: amb },
+  // { name: 'PO', req: pol },
+  // { name: 'AD', req: adr },
+  // { name: 'PA', req: pat },
+  // { name: 'DU', req: doc },
+  // { name: 'MU', req: amb },
   { name: 'MB', req: history },
-  { name: 'DV', req: move}
+  // { name: 'AP', req: talons },
+  // { name: 'DV', req: move}
 ];
 
 const xml = `select 

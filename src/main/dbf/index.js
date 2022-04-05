@@ -8,6 +8,7 @@ import createMB from './createMB';
 import createDV from './createDV';
 
 export default {
+  AP: createAP,
   PO: createPO,
   AD: createAD,
   PA: createPA,

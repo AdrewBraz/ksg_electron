@@ -12,23 +12,14 @@ export default async (list) => {
     { name: 'CHD', type: 'D', size: 8 },
   ];
 
-  const records = list.length === 0
-    ? [{
-      AP_ID: '',
-      PATIENT: '',
-      AP_TYPE: '',
-      N_NAP: '',
-      D_NAP: new Date(),
-      DS_NAP: '',
-      ORGAN: '',
-      CHD: new Date(),
-    }]
-    : list.map((item) => {
+  console.log(list)
+
+  const records = list.map((item) => {
+      console.log(item)
       const {
         AP_ID, PATIENT, AP_TYPE, D_NAP, DS_NAP, ORGAN,
       } = item;
       const N_NAP = item.N_NAP ? item.N_NAP.replace(/\./g, '') : '""';
-      console.log(N_NAP, item)
       return {
         AP_ID: AP_ID || '',
         PATIENT: PATIENT ? `${PATIENT}` : '',

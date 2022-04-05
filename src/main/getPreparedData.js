@@ -9,8 +9,8 @@ import { vmpReq, kslpStr } from './requestStrings';
 export default async(db, config, request) => {
   const ksgData = await getData(db, config, request);
   const vmp = await getData(db, config, vmpReq);
-  // console.log(vmp)
   const vmpList = await getVmpData(vmp);
   const ksgList = rmpData(ksgData)
+  console.log(ksgList)
   return {vmpList, ksgList}
 }
