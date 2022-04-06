@@ -1,12 +1,12 @@
+//@ts-check
 import { getHospList } from '../utils/dbfUtils.js';
-import { DBFFile } from 'dbffile';
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
   return this;
 };
 
-export default async (list) =>{
+export default (list) =>{
   const res = getHospList(list)
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 7 },
@@ -53,8 +53,5 @@ export default async (list) =>{
     };
   })
 
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/DV.dbf', fieldDescriptors, { encoding: 'cp866' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['DV', fieldDescriptors, records]
 }

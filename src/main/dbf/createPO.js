@@ -1,6 +1,4 @@
-import { DBFFile } from 'dbffile';
-import iconv from 'iconv-lite';
-import fs from 'fs';
+//@ts-check
 
 export default async (list) => {
   const fieldDescriptors = [
@@ -50,8 +48,5 @@ export default async (list) => {
     };
   });
 
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/PO.dbf', fieldDescriptors, { encoding: 'win1251' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['PO', fieldDescriptors, records]
 };

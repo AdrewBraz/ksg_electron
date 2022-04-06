@@ -1,6 +1,6 @@
-import { DBFFile } from 'dbffile';
+//@ts-check
 
-export default async (list) => {
+export default (list) => {
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'C_I', type: 'C', size: 30 },
@@ -51,8 +51,5 @@ export default async (list) => {
     };
   });
 
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/MB.dbf', fieldDescriptors, { encoding: 'cp866' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['MB', fieldDescriptors, records]
 };

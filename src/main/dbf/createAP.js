@@ -1,6 +1,5 @@
-import { DBFFile } from 'dbffile';
-
-export default async (list) => {
+//@ts-check
+export default (list) => {
   const fieldDescriptors = [
     { name: 'AP_ID', type: 'C', size: 36 },
     { name: 'PATIENT', type: 'C', size: 36 },
@@ -11,8 +10,6 @@ export default async (list) => {
     { name: 'ORGAN', type: 'C', size: 10 },
     { name: 'CHD', type: 'D', size: 8 },
   ];
-
-  console.log(list)
 
   const records = list.map((item) => {
       console.log(item)
@@ -32,8 +29,5 @@ export default async (list) => {
       };
     });
 
-  const dbf = await DBFFile.create(`C:/Users/User/Desktop/Мегаклиника/AP.dbf`, fieldDescriptors);
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['AP', fieldDescriptors, records]
 };

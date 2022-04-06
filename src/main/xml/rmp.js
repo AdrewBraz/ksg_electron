@@ -1,6 +1,6 @@
 import { create, fragment } from 'xmlbuilder2';
 import {
-  format, getMonth, getDate, lastDayOfMonth,
+  format, parseISO, getMonth, getDate, lastDayOfMonth,
 } from 'date-fns';
 import { utf8_decode } from './utils';
 
@@ -167,7 +167,7 @@ export default (coll) => {
       .ele('COMENTSL').txt(`"Загружено из МИС"`).up()
       rows.forEach(element => {
         const MedDevFrag = fragment().ele('MED_DEV')
-          .ele('DATE_MED').txt(`${element.DATE_MED}`).up()
+          .ele('DATE_MED').txt(`${(element.DATE_MED).split('.').reverse().join('-')}`).up()
           .ele('CODE_MEDDEV').txt(`${element.CODE_MEDDEV}`).up()
           .ele('NUMBER_SER').txt(`${element.NUMBER_SER}`).up()
         .up()
@@ -270,7 +270,7 @@ export default (coll) => {
           const rows = JSON.parse(JSON_DATA).ROWS;
           rows.forEach(element => {
             const MedDevFrag = fragment().ele('MED_DEV')
-              .ele('DATE_MED').txt(`${element.DATE_MED}`).up()
+              .ele('DATE_MED').txt(`${(element.DATE_MED).split('.').reverse().join('-')}`).up()
               .ele('CODE_MEDDEV').txt(`${element.CODE_MEDDEV}`).up()
               .ele('NUMBER_SER').txt(`${element.NUMBER_SER}`).up()
             .up()

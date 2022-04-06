@@ -1,4 +1,5 @@
-import { DBFFile } from 'dbffile';
+//@ts-check
+import { medicalServList } from '../utils/dbfUtils.js';
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -6,6 +7,7 @@ Date.prototype.addHours = function (h) {
 };
 
 export default async (list) => {
+  const result = medicalServList(list)
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'COD_U', type: 'C', size: 36 },
@@ -31,7 +33,7 @@ export default async (list) => {
     { name: 'CHD', type: 'D', size: 8 },
   ];
 
-  const records = list.map((item) => {
+  const records = result.map((item) => {
     const {
       PATIENT, COD, COD_U, K_U, DS, D_U, C_I, MU_TYPE, IS_PRIM, PROG,
     } = item;
@@ -59,8 +61,5 @@ export default async (list) => {
     };
   });
 
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/MU.dbf', fieldDescriptors, { encoding: 'cp866' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['MU', fieldDescriptors, records]
 };

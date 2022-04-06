@@ -69,13 +69,7 @@ const config = {
     for (const item of listOfOmsRequests) {
       const result = await getData(oracledb, config, item.req);
       const createDBF = dbfController[item.name];
-      if (item.name === 'MU') {
-        const interin = await excelParser();
-        const res = medicalServList(result, interin);
-          createDBF(res);
-      } else {
-        createDBF(result);
-      }
+      createDBF(result)
     }
 
       return 'success';

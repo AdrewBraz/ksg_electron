@@ -1,8 +1,5 @@
-import { DBFFile } from 'dbffile';
-import iconv from 'iconv-lite';
-import fs from 'fs';
-
-export default async (list) => {
+//@ts-check
+export default (list) => {
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'TIP_ADR', type: 'C', size: 1 },
@@ -46,9 +43,5 @@ export default async (list) => {
       CHD: new Date(),
     };
   });
-
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/AD.dbf', fieldDescriptors, { encoding: 'cp866' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['AD', fieldDescriptors, records]
 };

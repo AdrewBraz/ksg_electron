@@ -1,4 +1,4 @@
-import { DBFFile } from 'dbffile';
+//@ts-check
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -50,8 +50,5 @@ export default async (list) => {
     };
   });
 
-  const dbf = await DBFFile.create('C:/Users/User/Desktop/Мегаклиника/PA.dbf', fieldDescriptors, { encoding: 'cp866' });
-  console.log('DBF file created.');
-  await dbf.appendRecords(records);
-  console.log(`${records.length} records added.`);
+  return ['PA', fieldDescriptors, records]
 };
