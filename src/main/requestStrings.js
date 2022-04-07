@@ -265,14 +265,14 @@ left join a.t_smh_plans talons on talons.t_med_chrt_id = smp.med_id
 where list.channel like 'Городская скорая помощь'`;
 
 export const listOfOmsRequests = [
-  // { name: 'PO', req: pol },
-  // { name: 'AD', req: adr },
-  // { name: 'PA', req: pat },
-  // { name: 'DU', req: doc },
-  // { name: 'MU', req: amb },
+  { name: 'PO', req: pol },
+  { name: 'AD', req: adr },
+  { name: 'PA', req: pat },
+  { name: 'DU', req: doc },
+  { name: 'MU', req: amb },
   { name: 'MB', req: history },
-  // { name: 'AP', req: talons },
-  // { name: 'DV', req: move}
+  { name: 'AP', req: talons },
+  { name: 'DV', req: move}
 ];
 
 const xml = `select 

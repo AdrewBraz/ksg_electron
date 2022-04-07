@@ -6,7 +6,7 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
-export default async (list) => {
+export default (list) => {
   const result = medicalServList(list)
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },

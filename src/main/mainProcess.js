@@ -11,6 +11,7 @@ import getData from './getData';
 import createZip from './createZip'
 import { ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
 import dbfController from './dbf';
+import dbfCreator from './dbf/dbfCreator.js';
 import excelParser from './excelParser';
 import { medicalServList } from './utils/dbfUtils';
 import compare from './compareLists'
@@ -68,8 +69,9 @@ const config = {
       const obj = {};
     for (const item of listOfOmsRequests) {
       const result = await getData(oracledb, config, item.req);
-      const createDBF = dbfController[item.name];
-      createDBF(result)
+      const [name, descriptors, records] = dbfController[item.name](result);
+      console.log(name)
+       await dbfCreator(name, descriptors, records)
     }
 
       return 'success';

@@ -1,6 +1,6 @@
 //@ts-check
 
-export default async (list) => {
+export default (list) => {
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'S_POL', type: 'C', size: 16 },
@@ -14,7 +14,6 @@ export default async (list) => {
     { name: 'POL_S', type: 'C', size: 1 },
     { name: 'CHD', type: 'D', size: 8 },
   ];
-
   const records = list.map((item) => {
     const {
       PATIENT, S_POL, SN_POL, C_T, Q_OGRN, DATE_EN, DATE_E, POL_S, QD_NAME,
@@ -33,6 +32,7 @@ export default async (list) => {
     }
     const date = new Date('12.31.2074');
     const dateExp = !DATE_E ? DATE_E : (DATE_E.getTime() > date.getTime() ? date : DATE_E);
+
     return {
       PATIENT: `${PATIENT}`,
       S_POL,
