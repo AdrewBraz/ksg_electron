@@ -11,6 +11,5 @@ export default async(db, config, request) => {
   const vmp = await getData(db, config, vmpReq);
   const vmpList = await getVmpData(vmp);
   const ksgList = rmpData(ksgData)
-  console.log(ksgList)
   return {vmpList, ksgList}
 }

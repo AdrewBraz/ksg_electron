@@ -1,5 +1,9 @@
 import { findIndex } from 'lodash';
-import { DayCalculation } from './utils.js'
+
+Date.prototype.addHours = function (h) {
+  this.setHours(this.getHours() + h);
+  return this;
+};
 
 const reg = new RegExp(/\w\d\d$/);
 const replaceDs = (ds) => (ds === 'I10' ? ds : ds.replace(reg, '$&.0'));
@@ -106,7 +110,7 @@ const getHospList = (list) => {
       acc.push(obj)
       return acc
     } else if(item.KIND === 'ПЕРЕВЕДЕН'){
-      acc[acc.length - 1].D_U = D_B;
+      acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
       acc[acc.length - 1].COD = getICUCode(acc[acc.length - 1].K_U);
       const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: '', PROG, TIP, D_TYPE, MCOD, CODE };
@@ -114,7 +118,7 @@ const getHospList = (list) => {
       acc.push(obj)
       return acc
     } else if(item.KIND === 'ВЫПИСАН'){
-      acc[acc.length - 1].D_U = D_B;
+      acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
       acc[acc.length - 1].K_U = 0
       return acc;

@@ -12,7 +12,6 @@ export default (list) => {
   ];
 
   const records = list.map((item) => {
-      console.log(item)
       const {
         AP_ID, PATIENT, AP_TYPE, D_NAP, DS_NAP, ORGAN,
       } = item;

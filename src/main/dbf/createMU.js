@@ -1,5 +1,6 @@
 //@ts-check
 import { medicalServList } from '../utils/dbfUtils.js';
+import Interin from '../Interin_FOMS.json';
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -7,7 +8,7 @@ Date.prototype.addHours = function (h) {
 };
 
 export default (list) => {
-  const result = medicalServList(list)
+  const result = medicalServList(list, Interin)
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'COD_U', type: 'C', size: 36 },
@@ -41,7 +42,7 @@ export default (list) => {
       PATIENT: `${PATIENT}`,
       DS: !DS ? 'I10' : `${DS}`,
       COD,
-      COD_U: COD_U || '32042',
+      COD_U: COD_U ? COD_U : '32042',
       K_U,
       P_U: '1',
       D_U: D_U.addHours(4),

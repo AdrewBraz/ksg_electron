@@ -1,11 +1,6 @@
 //@ts-check
 import { getHospList } from '../utils/dbfUtils.js';
 
-Date.prototype.addHours = function (h) {
-  this.setHours(this.getHours() + h);
-  return this;
-};
-
 export default (list) =>{
   const res = getHospList(list)
   const fieldDescriptors = [
@@ -30,7 +25,6 @@ export default (list) =>{
   ];
   const records = res.map(item => {
     const { PATIENT, C_I, COD_U, D_B, D_U, ND, T_B, T_U, DDS, COD, PROG, TIP, D_TYPE, CODE, RESULT } = item;
-    console.log(ND)
     return {
       PATIENT: `${PATIENT}`,
       C_I: `${C_I}`,

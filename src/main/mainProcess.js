@@ -14,7 +14,6 @@ import dbfController from './dbf';
 import dbfCreator from './dbf/dbfCreator.js';
 import excelParser from './excelParser';
 import { medicalServList } from './utils/dbfUtils';
-import compare from './compareLists'
 
 export default () => {
 
@@ -49,15 +48,6 @@ const config = {
     }
   })
 
-  ipcMain.handle('compare', async(e, id) => {
-    console.log(ffoms['excel'])
-    const { ksgList } = await getPreparedData(oracledb, config, ffoms['excel'])
-    const interinKsg = await getData(oracledb, config, intKsg)
-
-    const result = await compare(interinKsg, ksgList);
-    return result
-  })
-
   ipcMain.handle('megaChannel', async(e, id) => {
     const files = fs.readdirSync('C:/Users/User/Desktop/Мегаклиника');
     files.forEach((item) => {
@@ -69,8 +59,8 @@ const config = {
       const obj = {};
     for (const item of listOfOmsRequests) {
       const result = await getData(oracledb, config, item.req);
+      console.log(item.name)
       const [name, descriptors, records] = dbfController[item.name](result);
-      console.log(name)
        await dbfCreator(name, descriptors, records)
     }
 
