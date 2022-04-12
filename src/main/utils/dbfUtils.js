@@ -52,8 +52,8 @@ const replaceDoc = (cod) => {
 const medicalServList = (list, interin) => {
   let patient;
   let ds;
-
-  const l1 = list.filter((el) => interin[`${el.SRV_ID}`] !== undefined).map((el) => {
+  console.log(interin)
+  const l1 = list.filter((el) => interin[el.SRV_ID] !== undefined).map((el) => {
     const {
       SRV_ID, COD_U, DS, ORG_ID,
     } = el;
@@ -61,6 +61,7 @@ const medicalServList = (list, interin) => {
     const doc = replaceDoc(COD_U);
     const org = replaceOrg(ORG_ID);
     const cod = interin[`${SRV_ID}`];
+    console.log(cod)
     return {
       ...el, DS: diag, COD_U: doc, ORG_ID: org, COD: cod, MU_TYPE: '1', IS_PRIM: '1',
     };

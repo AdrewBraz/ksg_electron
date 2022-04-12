@@ -59,7 +59,6 @@ const config = {
       const obj = {};
     for (const item of listOfOmsRequests) {
       const result = await getData(oracledb, config, item.req);
-      console.log(item.name)
       const [name, descriptors, records] = dbfController[item.name](result);
        await dbfCreator(name, descriptors, records)
     }
