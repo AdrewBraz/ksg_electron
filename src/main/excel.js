@@ -1,7 +1,6 @@
 // @ts-check
 import ExcelJS from 'exceljs';
 import path from 'path';
-import { calculateKsg } from './ksg';
 
 const sheetBuilder = async (vmp, ksg, workbook) => {
   const translateVmpKeys = {

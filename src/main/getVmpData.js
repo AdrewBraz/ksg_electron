@@ -1,4 +1,4 @@
-import { getRslt, getIshod, utf8_decode } from './xml/utils';
+import { getRslt, getIshod } from './xml/utils';
 import { DayCalculation } from './utils/utils.js'
 
 const vHmp = [{
@@ -72,7 +72,7 @@ export default async (data) => {
       RESH_HMP: 1,
       IDCASE: `${PATIENT}_${C_I}`,
       ADR_GAR: '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc',
-      ADR_NAME: utf8_decode('121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3'),
+      ADR_NAME: '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3',
       DATE_Z_1: IN_DATE,
       DATE_Z_2: OUT_DATE,
       KD_Z: DayCalculation(IN_DATE, OUT_DATE),

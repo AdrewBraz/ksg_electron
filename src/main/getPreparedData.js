@@ -1,8 +1,6 @@
 import getData from './getData';
 import getVmpData from './getVmpData';
-import dataBuilder from './dataBuilder';
 import rmpData from './rmpData'
-import parseKslp from './parseKslp';
 import { vmpReq, kslpStr } from './requestStrings';
 
 

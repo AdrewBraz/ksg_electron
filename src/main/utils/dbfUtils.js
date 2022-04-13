@@ -1,4 +1,4 @@
-import { findIndex } from 'lodash';
+import { findIndex, find } from 'lodash';
 
 Date.prototype.addHours = function (h) {
   this.setHours(this.getHours() + h);
@@ -52,21 +52,22 @@ const replaceDoc = (cod) => {
 const medicalServList = (list, interin) => {
   let patient;
   let ds;
-  console.log(interin)
-  const l1 = list.filter((el) => interin[el.SRV_ID] !== undefined).map((el) => {
+
+  const l1 = list.map((el) => {
     const {
       SRV_ID, COD_U, DS, ORG_ID,
     } = el;
+    const intSrv = find(interin, {SRV_ID: SRV_ID})
+    const COD = intSrv ? intSrv.OMS_CODE : ''
     const diag = !DS ? 'I10' : replaceDs(DS);
     const doc = replaceDoc(COD_U);
     const org = replaceOrg(ORG_ID);
-    const cod = interin[`${SRV_ID}`];
-    console.log(cod)
     return {
-      ...el, DS: diag, COD_U: doc, ORG_ID: org, COD: cod, MU_TYPE: '1', IS_PRIM: '1',
+      ...el, DS: diag, COD_U: doc, ORG_ID: org, COD, MU_TYPE: '1', IS_PRIM: '1',
     };
-  });
+  }).filter(el => el.COD)
   const l2 = l1.reduce((acc, item) => {
+    console.l
     const { PATIENT, D_U, COD } = item;
     const index = findIndex(acc, { PATIENT, D_U, COD });
     if (index < 0) {

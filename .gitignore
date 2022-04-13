@@ -1,5 +1,6 @@
 node_modules
 *.xslx
 *.zip
+*.dbf
 dist
 ksg-win32-x64

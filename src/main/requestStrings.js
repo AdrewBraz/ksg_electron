@@ -234,17 +234,17 @@ where list.cod in ('200530', '200525', '200409', '200510')
 where oms.id not in (select id from st.interin_ksg)
 `;
 
-const doc = `select * from oms_pat_doc doc inner join oms_pat_pol pol on doc.patient = pol.patient`;
+const doc = `select doc.* from oms_pat_doc doc inner join oms_pat_pol pol on doc.patient = pol.patient`;
 const pol = `select * from oms_pat_pol where sn_pol is not null and patient not like '33356'`;
-const adr = `select * from oms_pat_adr adr inner join oms_pat_pol pol on adr.patient = pol.patient`;
-const pat = `select * from oms_pat pat inner join oms_pat_pol pol on pat.patient = pol.patient `;
+const adr = `select adr.* from oms_pat_adr adr inner join oms_pat_pol pol on adr.patient = pol.patient`;
+const pat = `select pat.* from oms_pat pat inner join oms_pat_pol pol on pat.patient = pol.patient `;
 const history = `select mk.fio, mk.patient, mk.c_i, mk.t_ci, mk.mb_stat, decode(tal.talon_num, null, '', concat(mk.patient, mk.c_i)) ap_id, mk.h_typ, mk.src, mk.ord, mk.ishod, mk.rslt, mk.prog, mk.travma, mk.ds_p, mk.ds, mk.ds_s, mk.ds_o, smp.dord_n,
 decode(tal.talon_num, null, '', concat(mk.patient, mk.c_i)) vmpap_id
 from oms_pat_mk mk
 inner join oms_pat_pol pol on mk.patient = pol.patient
 left join smp_num smp on mk.med_id = smp.med_id 
 left join a.t_smh_plans tal on smp.med_id = tal.t_med_chrt_id`;
-const amb = `select * from oms_pat_srv srv inner join oms_pat_pol pol on srv.patient = pol.patient`;
+const amb = `select srv.* from oms_pat_srv srv inner join oms_pat_pol pol on srv.patient = pol.patient`;
 const move = `select distinct move.fio_pat, move.patient, move.c_i, move.org_type, move.org_pat, move.cod_u, move.fio_sot, to_date(move.d_b, 'dd.mm.yy') d_b, to_char(move.d_b, 'HH24:MI') d_time, move.kind, move.dds, move.cod, move.prog, move.tip, move.d_type, move.mcod, move.code, move.result, move.h_pays, move.h_date 
 from oms_pat_move move
 inner join st.ksg_list list on list.patient = move.patient
@@ -353,7 +353,7 @@ tal.talon_date tal_d,
 f.json_data
 from st.ksg_list_v v 
 left join ( select parent_id, json_data from wi.xs$fd where doc_type='FD.PROTOCOL_IMPLANTS' and status <99) f on v.id = f.parent_id
-inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and v.channel not like 'Городская скорая помощь' and tal.talon_num is not null`
+inner join a.t_smh_plans tal on tal.t_med_chrt_id = v.id where v.cod like '200%' and v.channel not like 'Городская скорая помощь'`
 
 export const ksg = `select 
 st.fio,
