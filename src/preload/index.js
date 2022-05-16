@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld("api", {
   ffomsData: async (channel, data) => {
     return await ipcRenderer.invoke(channel, data)
   },
-  compareData: async(channel, data) => {
-    return await ipcRenderer.invoke('compare', data)
+  pdfCreation: async(channel, data) => {
+    return await ipcRenderer.invoke('pdf', data)
   }
 }) 

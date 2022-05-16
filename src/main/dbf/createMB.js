@@ -25,18 +25,18 @@ export default (list) => {
 
   const records = list.map((item) => {
     const {
-      PATIENT, C_I, T_CI, ISHOD, RSLT, H_TYP, DS_P, PROG, DORD_N, AP_ID, VMPAP_ID
+      PATIENT, C_I, T_CI, ISHOD, RSLT, SRC,  H_TYP, DS_P, MB_STAT, PROG, DORD_N, AP_ID, VMPAP_ID
     } = item;
 
     return {
       PATIENT: `${PATIENT}`,
       C_I: `${C_I}`,
       T_CI,
-      MB_STAT: '01',
+      MB_STAT,
       DORD_N: DORD_N ? DORD_N : '',
       AP_ID: AP_ID ? AP_ID : '',
       H_TYP,
-      SRC: '10',
+      SRC: SRC ? '1' : '10',
       ORD: '4',
       ISHOD,
       RSLT,

@@ -9,11 +9,10 @@ import doms from './xml/doms';
 import rmp from './xml/rmp';
 import getData from './getData';
 import createZip from './createZip'
-import { ffoms, ksg as intKsg, listOfOmsRequests } from './requestStrings';
+import { ffoms, listOfOmsRequests, servStr, hospStr } from './requestStrings';
 import dbfController from './dbf';
 import dbfCreator from './dbf/dbfCreator.js';
-import excelParser from './excelParser';
-import { medicalServList } from './utils/dbfUtils';
+import pdfCreator from './pdfCreator';
 
 export default () => {
 
@@ -27,7 +26,6 @@ const config = {
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
     const requestString = ffoms[id];
-    console.log(id)
     const { vmpList, ksgList } = await getPreparedData(oracledb, config, requestString)
     if( id === 'excel'){
       if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
@@ -44,6 +42,20 @@ const config = {
     if (id === 'rmp') {
       const xml = await rmp({ ksgList, vmpList });
       await createZip(xml)
+      return true
+    }
+  })
+
+  ipcMain.handle('pdf', async(e, id) => {
+    console.log(id)
+    if( id === 'serv'){
+      const result = await getData(oracledb, config, servStr);
+      await pdfCreator(result, `C:\\Users\\User\\Desktop\\PDF\\1974`)
+      return true
+    }
+    if( id === 'hosp'){
+      // const result = await getData(oracledb, config, servStr);
+      await pdfCreator(result, `C:\\Users\\User\\Desktop\\PDF\\МГФОМС стационар`)
       return true
     }
   })

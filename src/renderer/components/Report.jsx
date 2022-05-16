@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileExcel, faCode, faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel, faCode, faDatabase, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { css } from "@emotion/react";
 import HashLoader from "react-spinners/HashLoader";
 import { DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
@@ -16,26 +16,33 @@ const paths = {
     func: () => window.api.ffomsData('ffomsChannel', 'excel'),
     type: 'button'
   },
-  compare: {
-    path: 'compare',
-    text: 'Сравнение ксг групп',
-    icon: faFileExcel,
-    func: () => window.api.ffomsData('compare', 'comp'),
-    type: 'button'
+  pdfServ: {
+    path: 'pdfServ',
+    text: '1974',
+    icon: faFilePdf,
+    func: () => window.api.pdfCreation('pdf', 'serv'),
+    type: 'PDF nav'
+  },
+  pdfHosp: {
+    path: 'pdfHosp',
+    text: 'Эпикризы',
+    icon: faFilePdf,
+    func: () => window.api.pdfCreation('pdf', 'hosp'),
+    type: 'PDF nav'
   },
   doms: {
     path: 'doms',
     text: 'ДОМС',
     icon: faCode,
     func: () => window.api.ffomsData('ffomsChannel', 'doms'),
-    type: 'nav'
+    type: 'XML nav'
   },
   rmp: {
     path: 'rmp',
     text: 'РМП',
     icon: faCode,
     func: () => window.api.ffomsData('ffomsChannel', 'rmp'),
-    type: 'nav'
+    type: 'XML nav'
   },
   dbf: {
     path: 'dbf',
@@ -47,6 +54,7 @@ const paths = {
 };
 
 const Report = () => {
+  console.log(window.api)
   let [loading, setLoading] = useState(false);
     const override = css`
       display: block;
@@ -54,6 +62,7 @@ const Report = () => {
       border-color: red;
     `;
     const getReport = async (path) => {
+      console.log(path)
       const { func } = paths[path]
       try {
         setLoading(true)
@@ -76,12 +85,12 @@ const Report = () => {
         </button>
       </div>
     );
-    const renderNavButton = (coll) =>  (
+    const renderNavButton = (coll, dropType, title) =>  (
       <div className="input-group-prepend">
-        <DropdownButton variant="info" as={ButtonGroup} title='Выгрузка за период ФФОМС' id="bg-nested-dropdown">
+        <DropdownButton variant="info" as={ButtonGroup} title={title} id="bg-nested-dropdown">
           {Object.keys(coll).map((item, i) => {
             const { path, text, icon, type } = coll[item];
-            if( type === 'nav'){
+            if( type === dropType){
               return (
                 <Dropdown.Item key={path+type} eventKey={i} onClick={() => { getReport(path)}}>
                   {text}
@@ -99,11 +108,12 @@ const Report = () => {
         <div className="input-group flex-row justify-content-around w-100">
           {Object.keys(paths).map((item) => {
             const { path, text, icon, type } = paths[item];
-            if(type !== 'nav'){
+            if(type === 'button'){
               return renderButton(path, text, icon)
             }
           })}
-          {renderNavButton(paths)}
+          {renderNavButton(paths, 'XML nav', 'Выгрузка в ФФОМС за период')}
+          {renderNavButton(paths, 'PDF nav', 'Выгрузка выписных эпикризов')}
         </div>
       </div>
       <HashLoader size={70} margin={8} color={'#FFFFFF'} loading={loading} css={override} />

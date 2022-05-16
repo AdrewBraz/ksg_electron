@@ -270,13 +270,13 @@ left join a.t_smh_plans talons on talons.t_med_chrt_id = smp.med_id
 where list.channel like 'Городская скорая помощь'`;
 
 export const listOfOmsRequests = [
-  { name: 'PO', req: pol },
-  { name: 'AD', req: adr },
-  { name: 'PA', req: pat },
-  { name: 'DU', req: doc },
-  { name: 'MU', req: amb },
-  { name: 'MB', req: history },
-  { name: 'AP', req: talons },
+  // { name: 'PO', req: pol },
+  // { name: 'AD', req: adr },
+  // { name: 'PA', req: pat },
+  // { name: 'DU', req: doc },
+  // { name: 'MU', req: amb },
+  // { name: 'MB', req: history },
+  // { name: 'AP', req: talons },
   { name: 'DV', req: move}
 ];
 
@@ -390,6 +390,19 @@ decode(st.F_CR_PARAM_CODE, 'pbt', 'gibp30', st.F_CR_PARAM_CODE) F_CR_PARAM_CODE,
 st.f_c_duration_case,
 st.json_data
 from st.interin_ksg st`
+
+export const servStr = `select oms.fio, oms.c_i иб, hosp.c_i амб, oms.s_pol, oms.sn_pol, oms.dds, oms.in_date, oms.out_date, xm.html_text from st.ksg_list_v oms
+left join fd.xml_regs xm on xm.case_history_id = oms.id
+left join 
+(SELECT srv.patient, srv.c_i, srv.d_u, count(srv.srv_id) usl_num from st.oms_pat_srv srv
+inner join ec_srvs e on srv.srv_id = e.id
+where  e.code in ('015064')
+group by srv.patient,srv.c_i, srv.d_u
+) hosp on oms.patient = hosp.patient where oms.out_date >= to_date('01.09.2021', 'dd.mm.yyyy') and hosp.c_i is not null and xm.doc_type in ( 'DISCHARGE_GENERAL_CONCLUSION_1', 'DISCHARGE_GENERAL_CONCLUSION_1_DC') and xm.html_text is not null`
+
+export const hospStr = `select oms.fio, oms.c_i иб, oms.s_pol, oms.sn_pol, oms.dds, oms.in_date, oms.out_date, xm.html_text from st.ksg_list_v oms
+left join fd.xml_regs xm on xm.case_history_id = oms.id
+where oms.out_date >= to_date('01.09.2021', 'dd.mm.yyyy') and xm.doc_type in ( 'DISCHARGE_GENERAL_CONCLUSION_1', 'LEAD_GENERAL_CONCLUSION_1', 'DISCHARGE_GENERAL_CONCLUSION_1_DC') and oms.channel like 'Городская скорая помощь' and xm.html_text is not null`
 
 export const ffoms = {
   rmp: xml,

@@ -104,25 +104,29 @@ const getHospList = (list) => {
   let state = '';
   let count = 1;
   return list.reduce((acc, item, i) => {
-    const { PATIENT, C_I, COD_U, D_B, D_TIME, DDS, COD, PROG, TIP, D_TYPE, MCOD, CODE, RESULT } = item;
-    if(item.KIND === 'ПОЛОЖЕН'){
+    const { PATIENT, C_I, COD_U, D_B, D_TIME, DDS, COD, PROG, TIP, D_TYPE, MCOD, CODE, RESULT, KIND } = item;
+    console.log(COD, C_I, KIND )
+    if(KIND === 'ПОЛОЖЕН'){
       count = 1;
-      const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: '', PROG, TIP, D_TYPE, MCOD, CODE };
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B: D_B.addHours(3), D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: /200+/.test(COD) ? COD : getICUCode(acc[acc.length - 1].K_U), PROG, TIP: '', D_TYPE: '', MCOD, CODE };
       count = count + 1;
       acc.push(obj)
       return acc
-    } else if(item.KIND === 'ПЕРЕВЕДЕН'){
+    } else if(KIND === 'ПЕРЕВЕДЕН'){
       acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
-      acc[acc.length - 1].COD = getICUCode(acc[acc.length - 1].K_U);
-      const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: '', PROG, TIP, D_TYPE, MCOD, CODE };
+      acc[acc.length - 1].DDS = DDS
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B, D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD, PROG, TIP: '', D_TYPE: '', MCOD, CODE };
       count = count + 1;
       acc.push(obj)
       return acc
-    } else if(item.KIND === 'ВЫПИСАН'){
+    } else if(KIND === 'ВЫПИСАН'){
       acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
-      acc[acc.length - 1].K_U = 0
+      acc[acc.length - 1].K_U = 0;
+      acc[acc.length - 1].COD = COD
+      acc[acc.length - 1].TIP = TIP;
+      acc[acc.length - 1].D_TYPE = D_TYPE;
       return acc;
     }
   }, [])

@@ -15,7 +15,7 @@ export default (data) => {
         const [ FAM, IM, OT] = FIO.split(' ')
         const calculateDays = DayCalculation(IN_DATE, OUT_DATE);
         const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
-        const ADR_GAR = USL_OK === 1 ? '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc' : 'f6549d35-fd39-4f67-b08f-fa9b89bf6119',
+        const ADR_GAR = USL_OK === 1 ? '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc' : 'f6549d35-fd39-4f67-b08f-fa9b89bf6119'
         const ADR_NAME = USL_OK === 1 ? '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3' : '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 5'
         let SNPOLIS; let
       ENP;
