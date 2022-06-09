@@ -2,10 +2,7 @@
   "name": "ksg",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "bin": {
-    "app": "dist/bin/app.js"
-  },
+  "main": "./dist/main/main.js",
   "engines": {
     "node": "12.0.0",
     "npm": "6"

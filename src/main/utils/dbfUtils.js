@@ -43,7 +43,7 @@ const replaceDoc = (cod) => {
     case '18463':
       return '34322';
     case null:
-      return '22023';
+      return '37447';
     default:
       return cod;
   }

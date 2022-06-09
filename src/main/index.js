@@ -3,12 +3,11 @@ import { app, BrowserWindow} from 'electron'
 import mainProcess from './mainProcess';
 import path from 'path';
 
-mainProcess()
   const createWindow = () => {
     // Create the browser window.
     let win = new BrowserWindow({
       title: 'Excel',
-      width: 900,
+      width: 650,
       height: 600,
       minWidth: 600,
       minHeight: 400,
@@ -17,12 +16,11 @@ mainProcess()
       show: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
-        webSecurity: false,
-        preload: path.join(app.getAppPath(), '../preload', 'ui-bundle.js')
+        preload: path.join(app.getAppPath(), './preload', 'ui-bundle.js')
       }
     })
     // and load the index.html of the app.
-    win.webContents.loadFile( path.join(__dirname, '../renderer/index.html'))
+    win.webContents.loadFile( './renderer/index.html')
     win.webContents.openDevTools()
     win.on('ready-to-show', () => {
       win.show()
@@ -48,5 +46,5 @@ mainProcess()
       createWindow()
     }
   })
-  
+  mainProcess()
   app.whenReady().then(createWindow)

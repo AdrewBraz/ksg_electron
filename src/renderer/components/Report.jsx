@@ -75,7 +75,7 @@ const Report = () => {
       }
     };
     const renderButton = (path, text, icon) => (
-      <div key={path} className="input-group-prepend">
+      <div key={path} className="input-group-prepend m-3">
         <button type="submit" onClick={() => { getReport(path); }} className=" btn btn-info btn-sm">
           <p>
             {text}
@@ -86,7 +86,7 @@ const Report = () => {
       </div>
     );
     const renderNavButton = (coll, dropType, title) =>  (
-      <div className="input-group-prepend">
+      <div className="input-group-prepend m-3">
         <DropdownButton variant="info" as={ButtonGroup} title={title} id="bg-nested-dropdown">
           {Object.keys(coll).map((item, i) => {
             const { path, text, icon, type } = coll[item];

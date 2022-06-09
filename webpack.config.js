@@ -9,15 +9,15 @@ module.exports = [
   {
     mode: process.env.NODE_ENV || 'development',
     target: 'electron-renderer',
-    entry: [
-      `${__dirname}/src/renderer/index.js`,
-    ],
     resolve: {
       extensions: ['.js', '.jsx'],
     },
+    entry: {
+      ui: './src/renderer/index.js',
+    },
     output: {
-      filename: 'index.js',
-      path: path.resolve(__dirname, 'dist/renderer/')
+      filename: '[name]-bundle.js',
+      path: path.resolve(__dirname, 'dist/renderer')
     },
     plugins: [
       new MiniCssExtractPlugin({
