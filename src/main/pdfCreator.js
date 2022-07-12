@@ -1,22 +1,31 @@
 //@ts-check
-import pdf from 'html-pdf'
-import phantom from 'phantomjs'
+import { BrowserWindow } from 'electron'
+import path from 'path'
+import fs from 'fs'
 
-export default async (list, path) => {
-    const generatePdf = async (text, file) => {
+
+const generateHtml = async (item) => {
+    await fs.writeFileSync(path.join('C:/Users/User/Desktop/html/', `${item.FIO}.html`), `<html><body>${item.HTML_TEXT}</body></html>`)
+}
+
+export default async (list, pathName) => {
+    const win  = new BrowserWindow({show: false})
+    const generatePdf = async (name) => {
+        console.log(name)
         const promis = new Promise((resolve, rej) => {
-            pdf.create(`<html><body><h1>>TEEEEEEST</h1></body></html>`, {phantomPath: __dirname + "/pathToNodeModules/phantomjs/bin/phantomjs",}).toFile(`C:\\Users\\User\\Desktop\\html\\1974\\test.pdf`, (err, res) =>{
-            if(err){
-                console.log(err)
-                rej(err)
-            }
-            resolve(res.filename);
+        if(rej){
+            console.log(rej+ 'sfas')
+        }
+        win.loadURL(`C:/Users/User/Desktop/html/${name}.html`)
+        win.webContents.printToPDF({}).then(data => {
+            fs.writeFileSync(`C:/Users/User/Desktop/html/${name}.pdf`, data)
         })
-      })
-      return promis
+        resolve('fininsh')
+    })
+    return promis
+}
+    for(const item of list){
+        await generateHtml(item)
+        await generatePdf(item.FIO)
     }
-    await generatePdf()
-    // for(const item of list){
-    //     await generatePdf(item.HTML_TEXT, item.FIO)
-    // }
 }

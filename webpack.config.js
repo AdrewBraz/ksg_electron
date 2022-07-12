@@ -74,7 +74,7 @@ module.exports = [
           options: {
             concurrency: 100,
           },
-        })
+        }),
       ],
     
     externals: ['mongodb-client-encryption']

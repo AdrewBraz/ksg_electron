@@ -49,12 +49,12 @@ const config = {
   ipcMain.handle('pdf', async(e, id) => {
     console.log(id)
     if( id === 'serv'){
-      // const result = await getData(oracledb, config, servStr);
+      const result = await getData(oracledb, config, servStr);
       await pdfCreator(result, `C:\\Users\\User\\Desktop\\PDF\\1974`)
       return true
     }
     if( id === 'hosp'){
-      // const result = await getData(oracledb, config, servStr);
+      const result = await getData(oracledb, config, hospStr);
       await pdfCreator(result, `C:\\Users\\User\\Desktop\\PDF\\МГФОМС стационар`)
       return true
     }

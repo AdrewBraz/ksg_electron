@@ -108,7 +108,7 @@ const getHospList = (list) => {
     console.log(COD, C_I, KIND )
     if(KIND === 'ПОЛОЖЕН'){
       count = 1;
-      const obj = { PATIENT, C_I, ND: count, COD_U, D_B: D_B.addHours(3), D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: /200+/.test(COD) ? COD : getICUCode(acc[acc.length - 1].K_U), PROG, TIP: '', D_TYPE: '', MCOD, CODE };
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B: D_B.addHours(3), D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: /200+/.test(COD) ? COD : '83010', PROG, TIP: '', D_TYPE: '', MCOD, CODE };
       count = count + 1;
       acc.push(obj)
       return acc
@@ -121,6 +121,7 @@ const getHospList = (list) => {
       acc.push(obj)
       return acc
     } else if(KIND === 'ВЫПИСАН'){
+      console.log(acc)
       acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
       acc[acc.length - 1].K_U = 0;

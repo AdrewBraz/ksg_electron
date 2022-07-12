@@ -16,12 +16,11 @@ import path from 'path';
       show: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
-        preload: path.join(app.getAppPath(), './preload', 'ui-bundle.js')
+        preload: path.join(app.getAppPath(), '../preload', 'ui-bundle.js')
       }
     })
     // and load the index.html of the app.
-    win.webContents.loadFile( './renderer/index.html')
-    win.webContents.openDevTools()
+    win.webContents.loadFile( '../renderer/index.html')
     win.on('ready-to-show', () => {
       win.show()
     })
@@ -46,5 +45,4 @@ import path from 'path';
       createWindow()
     }
   })
-  mainProcess()
-  app.whenReady().then(createWindow)
+  app.whenReady().then(createWindow).then(mainProcess)
