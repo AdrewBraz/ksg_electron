@@ -23,14 +23,14 @@ export default (coll) => {
     .ele('ZGLV')
       .ele('VERSION').txt('1.0').up()
       .ele('DATA').txt(`${format(new Date(), 'yyyy-MM-dd HH:mm:ss')}`).up()
-      .ele('FILENAME').txt(`2022_01_990089_005.xml`).up()
+      .ele('FILENAME').txt(`2022_06_00892400_005.xml`).up()
       .ele('SD_Z').txt(Object.values(ksgList).length + Object.values(vmpList).length).up()
     .up()
     .ele('OTPR')
-      .ele('CODE_MO').txt(990089).up()
+      .ele('CODE_MO').txt('00892400').up()
       .ele('YEAR').txt(2022).up()
-      .ele('MONTH').txt(1).up()
-    .ele('DAY').txt(31).up()
+      .ele('MONTH').txt('06').up()
+    .ele('DAY').txt(30).up()
     .up();
 
   Object.values(vmpList).forEach((item) => {
@@ -70,6 +70,7 @@ export default (coll) => {
         .ele('RSLT').txt(`${item.RSLT}`).up()
         .ele('ISHOD').txt(`${item.ISHOD}`).up()
         .ele('IS_PRERV').txt(`${item.IS_PRERV}`).up()
+        .ele('KOEF_D').txt(`1.703`).up()
         .ele('SL')
           .ele('SL_ID').txt(`${item.IDCASE}`).up()
           .ele('PODR').txt(`${item.PODR}`).up()
@@ -86,8 +87,7 @@ export default (coll) => {
           .ele('LECH_HMP').txt(1).up()
           .ele('DZP').txt(`${item.DZP}`).up()
           .ele('NFZ').txt(`${item.NFZ}`).up()
-          .ele('TARIF').txt(`${item.SUMV}`).up()
-        .up()
+          .ele('TARIF').txt(`${item.SUMV}`).up().up()
       .up();
 
     root.ele('ZAP').import(frag);
@@ -175,6 +175,8 @@ export default (coll) => {
       });
       root.last().last().last().import(UslFrag); 
     }
+    const sum = fragment().ele('SUMV').txt(`${item.SUMV}`);
+    root.last().last().import(sum)
   });
   Object.values(ksgList).forEach((item) => {
     const {
@@ -195,6 +197,7 @@ export default (coll) => {
       .ele('VIDPOM').txt(item.VIDPOM).up()
       .ele('FOR_POM').txt(item.FOR_POM).up()
       .ele('PROFIL').txt(item.PROFIL).up()
+      .ele('RESH').txt(`1`).up()
       .ele('PODR').txt(`${item.PODR}`).up()
       .ele('PODR_NAME').txt(`${item.PODR_NAME}`).up()
       .ele('PROFIL_K').txt(`${item.PROFIL_K}`).up()
@@ -217,7 +220,7 @@ export default (coll) => {
         .ele('KOEF_PRIV').txt(`${item.KOEF_PRIV}`).up()
         .ele('KOEF_SPEC').txt(`${item.KOEF_SPEC}`).up()
         .ele('KOEF_D').txt(`${item.KOEF_D}`).up()
-        .ele('SRED_NFZ').txt(`${item.SRED_NFZ}`).up()
+        .ele('SRED_NFZ').txt(`70119.00`).up()
         .ele('SL')
           .ele('SL_ID').txt(`${item.IDCASE}`).up()
           .ele('PODR').txt(`${item.PODR}`).up()
