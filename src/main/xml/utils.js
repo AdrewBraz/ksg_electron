@@ -43,13 +43,20 @@ const getPrev = (final, days, group = '') => {
   if (final === '108') {
     return 1;
   }
-  if (final === '208') {
+  else if (final === '208') {
     return 1;
   }
-  if (group === 235) {
+  else if (group === '240') {
     return 0;
   }
-  if (days <= 3) {
+  else if (group === '39') {
+    return 0;
+  }
+  else if (group === '119') {
+    console.log('yes')
+    return 0;
+  }
+  else if (days <= 3) {
     return 1;
   }
   return 0;

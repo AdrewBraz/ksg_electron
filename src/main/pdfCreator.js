@@ -5,7 +5,7 @@ import fs from 'fs'
 
 
 const generateHtml = async (item) => {
-    await fs.writeFileSync(path.join('C:/Users/User/Desktop/html/', `${item.FIO}.html`), `<html><body>${item.HTML_TEXT}</body></html>`)
+    await fs.writeFileSync(path.join('C:/Users/User/Desktop/html/', `${item.FIO}.html`), `<html><body>${item.HTML_TEXT}</body></html>`, { encoding: 'utf-8'})
 }
 
 export default async (list, pathName) => {
@@ -14,7 +14,7 @@ export default async (list, pathName) => {
         console.log(name)
         const promis = new Promise((resolve, rej) => {
         if(rej){
-            console.log(rej+ 'sfas')
+            rej("something went wrong")
         }
         win.loadURL(`C:/Users/User/Desktop/html/${name}.html`)
         win.webContents.printToPDF({}).then(data => {

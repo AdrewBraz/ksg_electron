@@ -39,6 +39,7 @@ export default (data) => {
             return 1
         }
         const ISHOD = getIshod(RSLT);
+        console.log(C_I, F_KSG_NUM, getPrev(RSLT, DAYS, F_KSG_NUM))
         return {
             KOEF_Z: F_KZ,
             IDNPR: `${PATIENT}_${ID}`,
@@ -64,7 +65,7 @@ export default (data) => {
             KD_Z: DAYS,
             RSLT,
             ISHOD,
-            IS_PRERV: F_KSG_NUM === 235 ? getPrev(RSLT, DAYS, F_MES_CODE) : getPrev(RSLT, DAYS),
+            IS_PRERV:  getPrev(RSLT, DAYS, F_KSG_NUM),
             VER_KSG: 2022,
             SL_K: getSlk(F_C_KSLP),
             PROFIL_K: getProfil(F_MES_CODE) === 81 ? 67 : 26,

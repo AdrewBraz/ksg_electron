@@ -220,7 +220,7 @@ export default (coll) => {
         .ele('KOEF_PRIV').txt(`${item.KOEF_PRIV}`).up()
         .ele('KOEF_SPEC').txt(`${item.KOEF_SPEC}`).up()
         .ele('KOEF_D').txt(`${item.KOEF_D}`).up()
-        .ele('SRED_NFZ').txt(`70119.00`).up()
+        .ele('SRED_NFZ').txt(`${item.SRED_NFZ}`).up()
         .ele('SL')
           .ele('SL_ID').txt(`${item.IDCASE}`).up()
           .ele('PODR').txt(`${item.PODR}`).up()
