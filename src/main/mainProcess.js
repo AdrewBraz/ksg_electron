@@ -13,9 +13,13 @@ import { ffoms, listOfOmsRequests, servStr, hospStr } from './requestStrings';
 import dbfController from './dbf';
 import dbfCreator from './dbf/dbfCreator.js';
 import pdfCreator from './pdfCreator';
+import i18n from 'i18n'
 
 export default () => {
-
+  i18n.configure({
+    locales: ['ru'],
+    directory: path.join(__dirname, 'locales')
+   })
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.fetchAsString = [ oracledb.CLOB ];
 const config = {
@@ -31,7 +35,7 @@ const config = {
       if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
         fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
       }
-      const result = await excel(vmpList, ksgList)
+      const result = await excel(vmpList, ksgList, i18n)
       return result
     }
   if (id === 'doms') {
