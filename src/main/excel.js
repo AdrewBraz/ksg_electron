@@ -6,43 +6,7 @@ import translations from './locales/ru.json';
 const sheetBuilder = async (vmp, ksg, workbook, i18) => {
   const translation  = Object.keys(translations);
   i18.setLocale('ru')
-  console.log(translation)
-  const translateVmpKeys = {
-    FIO: 'ФИО',
-    NAME: 'Наименование',
-    GR_HMP: 'Группа',
-    SUMV: 'Cумма',
-    DAYS: 'Кол-во дней',
-    DDS: 'Диагноз',
-    C_I: 'ИБ',
-    DATE_Z_1: 'Дата поступления',
-    DATE_Z_2: 'Дата выписки',
-    PODR_NAME: 'Отделение',
-    C_T: 'Регион',
-
-  };
-  const translateKsgKeys = {
-    FIO: 'ФИО',
-    DS1: 'Диагноз',
-    C_I: 'ИБ',
-    F_KSG_NUM: 'Группа',
-    AGE: 'Возраст',
-    FINAL_CODE: 'Код Прерывания',
-    F_CR_SERVICE_CODE: 'Услуга',
-    F_MES_NAME: 'Название КСГ',
-    F_MES_CODE: 'Код КСГ',
-    SUMV: 'Cумма',
-    DATE_Z_1: 'Дата поступления',
-    DATE_Z_2: 'Дата выписки',
-    KD_Z: 'Кол-во дней',
-    PODR: 'Отделение',
-    PODR_NAME: 'Код отделения',
-    PATOLOGY: 'Соп. заболевание',
-    C_T: 'Регион',
-  };
-
-  // const vmpIncludeKeys = Object.keys(translateVmpKeys);
-  // const ksgIncludeKeys = Object.keys(translateKsgKeys);
+  
   const vmpKeys = Object.keys(vmp[Object.keys(vmp)[0]]).filter((key) => translation.includes(key));
   const ksgKeys = Object.keys(ksg[Object.keys(ksg)[0]]).filter((key) => translation.includes(key));
 
