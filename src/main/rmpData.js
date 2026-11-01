@@ -1,7 +1,7 @@
 import {
-    getRslt, getIshod, getProfil, getPrev,
+    getRslt, getIshod, getProfil, getPrev, getPodr, getPovod, getProfil_M, getPR
   } from './xml/utils';
-import { DayCalculation } from './utils/utils.js'
+import { DayCalculation, checkPrice } from './utils/utils.js'
 
 export default (data) => {
     return data.map(item => {
@@ -9,25 +9,13 @@ export default (data) => {
             PATIENT, FIO, USL_OK, C_T, C_I, PATOLOGY, S_POL, SN_POL,  DDS, F_C_KSLP, AGE, IN_DATE, OUT_DATE, FINAL_CODE, ID, F_MES_CODE, F_MES_SUMM, F_KSG_NUM, F_KZ, F_CDIFF, F_CSPEC, F_CPRIV, F_BASE, F_C_DURATION_CASE,
             F_ZP, JSON_DATA
         } = item;
-        if(JSON_DATA){
-          console.log(JSON.parse(JSON_DATA).ROWS)
-        }
         const [ FAM, IM, OT] = FIO.split(' ')
         const calculateDays = DayCalculation(IN_DATE, OUT_DATE);
         const DAYS = USL_OK === 1 ? calculateDays : (Math.floor(calculateDays) + 1);
         const ADR_GAR = USL_OK === 1 ? '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc' : 'f6549d35-fd39-4f67-b08f-fa9b89bf6119'
         const ADR_NAME = USL_OK === 1 ? '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 3' : '121552, г. Москва, ул. 3-я Черепковская, д. 15А, стр. 5'
-        let SNPOLIS; let
-      ENP;
-    if (S_POL || SN_POL.length !== 16) {
-      if (!S_POL) {
-        SNPOLIS = `${SN_POL}`;
-      } else {
-        SNPOLIS = `${S_POL} ${SN_POL}`;
-      }
-    } else {
-      ENP = SN_POL;
-    }
+        const OID_FRMO = getPodr(item.PODR)
+        const ENP = SN_POL
         const final = FINAL_CODE || '0';
         const RSLT = getRslt(FINAL_CODE, USL_OK);
         const getSlk = kslp => {
@@ -39,14 +27,15 @@ export default (data) => {
             return 1
         }
         const ISHOD = getIshod(RSLT);
-        console.log(C_I, F_KSG_NUM, getPrev(RSLT, DAYS, F_KSG_NUM))
+        const IS_PRERV = getPrev(RSLT, DAYS, F_KSG_NUM);
+        const PR = getPR(RSLT);
+        const PR_PR = IS_PRERV === 1 && PR === '' ? '8' : PR
         return {
             KOEF_Z: F_KZ,
             IDNPR: `${PATIENT}_${ID}`,
             ENP,
-            SNPOLIS,
             AGE,
-            POVOD: 3,
+            POVOD: getPovod(F_MES_CODE),
             FAM,
             IM,
             OT: OT ? OT : '',
@@ -56,6 +45,7 @@ export default (data) => {
             VIDPOM: 31,
             FOR_POM: 3,
             PROFIL: getProfil(F_MES_CODE),
+            PROFIL_M: getProfil_M(F_MES_CODE),
             RESH: 1,
             IDCASE: `${PATIENT}_${C_I}`,
             ADR_GAR,
@@ -65,17 +55,19 @@ export default (data) => {
             KD_Z: DAYS,
             RSLT,
             ISHOD,
-            IS_PRERV:  getPrev(RSLT, DAYS, F_KSG_NUM),
+            IS_PRERV,
+            PR_PR,
             VER_KSG: 2022,
             SL_K: getSlk(F_C_KSLP),
             PROFIL_K: getProfil(F_MES_CODE) === 81 ? 67 : 26,
             FINAL_CODE: final,
-            SRED_NFZ: F_BASE ? F_BASE : '',
+            SRED_NFZ: F_CDIFF,
             KOEF_SPEC: F_CSPEC,
             KOEF_PRIV: F_CPRIV,
             KOEF_PRERV: F_C_DURATION_CASE,
-            KOEF_D: F_CDIFF,
-            SUMV: F_MES_SUMM,
+            KOEF_D: F_BASE,
+            SUMV: checkPrice(F_MES_SUMM),
+            OID_FRMO,
             C_T,
             ...item
         }

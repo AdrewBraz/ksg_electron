@@ -37,9 +37,6 @@ export default async (data) => {
     if (acc[C_I]) {
       const { SUMV: total } = acc[C_I];
       const { KOEF_SPEC, SUMV } = calculateKsg(ratio, AGE, FINAL_CODE, PATOLOGY, DAYS, group, USL_OK, AGE)
-      if(C_I === '2021_9243'){
-        console.log(SUMV, group, DAYS)
-      }
       if (total < SUMV) {
         acc[C_I].KOEF_Z = ratio;
         acc[C_I].KOEF_SPEC = KOEF_SPEC;

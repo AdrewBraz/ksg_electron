@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFileExcel, faCode, faDatabase, faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faFileExcel, faFileExport, faDatabase, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { css } from "@emotion/react";
-import HashLoader from "react-spinners/HashLoader";
+import GridLoader from "react-spinners/GridLoader";
 import { DropdownButton, Dropdown, ButtonGroup } from 'react-bootstrap';
 
 const renderIcon = (icon) => <FontAwesomeIcon className="icon" icon={icon} />;
@@ -14,42 +14,32 @@ const paths = {
     text: 'Отчет за период ФФОМС',
     icon: faFileExcel,
     func: () => window.api.ffomsData('ffomsChannel', 'excel'),
-    type: 'button'
+    type: 'button',
+    isDisabled: false
   },
   pdfServ: {
     path: 'pdfServ',
-    text: '1974',
+    text: 'Отчёт в Минздрав',
     icon: faFilePdf,
     func: () => window.api.pdfCreation('pdf', 'serv'),
-    type: 'PDF nav'
-  },
-  pdfHosp: {
-    path: 'pdfHosp',
-    text: 'Эпикризы',
-    icon: faFilePdf,
-    func: () => window.api.pdfCreation('pdf', 'hosp'),
-    type: 'PDF nav'
-  },
-  doms: {
-    path: 'doms',
-    text: 'ДОМС',
-    icon: faCode,
-    func: () => window.api.ffomsData('ffomsChannel', 'doms'),
-    type: 'XML nav'
+    type: 'PDF nav',
+    isDisabled: false
   },
   rmp: {
     path: 'rmp',
-    text: 'РМП',
-    icon: faCode,
+    text: 'Выгрузка счета в ГИС ОМС',
+    icon: faFileExport,
     func: () => window.api.ffomsData('ffomsChannel', 'rmp'),
-    type: 'XML nav'
+    type: 'button',
+    isDisabled: false
   },
   dbf: {
     path: 'dbf',
     text: 'Выгрузка за период Мегаклиника',
     icon: faDatabase,
     func: () => window.api.getMegaData('megaChannel'),
-    type: 'button'
+    type: 'button',
+    isDisabled: false
   },
 };
 
@@ -58,7 +48,7 @@ const Report = () => {
   let [loading, setLoading] = useState(false);
     const override = css`
       display: block;
-      margin: 5rem auto;
+      margin: 10rem auto;
       border-color: red;
     `;
     const getReport = async (path) => {
@@ -74,9 +64,9 @@ const Report = () => {
         throw new Error('Something went wrong');
       }
     };
-    const renderButton = (path, text, icon) => (
+    const renderButton = (path, text, icon, isDisabled) => (
       <div key={path} className="input-group-prepend m-3">
-        <button type="submit" onClick={() => { getReport(path); }} className=" btn btn-info btn-sm">
+        <button type="submit" onClick={() => { getReport(path); }} className="btn btn-primary" disabled={isDisabled}>
           <p>
             {text}
             {' '}
@@ -105,18 +95,18 @@ const Report = () => {
   return (
     <>
       <div>
-        <div className="input-group flex-row justify-content-around w-100">
+        <div className="input-group flex-row justify-content-around w-100 mt-3">
           {Object.keys(paths).map((item) => {
-            const { path, text, icon, type } = paths[item];
+            const { path, text, icon, type, isDisabled} = paths[item];
             if(type === 'button'){
-              return renderButton(path, text, icon)
+              return renderButton(path, text, icon, isDisabled)
             }
           })}
-          {renderNavButton(paths, 'XML nav', 'Выгрузка в ФФОМС за период')}
-          {renderNavButton(paths, 'PDF nav', 'Выгрузка выписных эпикризов')}
+        </div>
+        <div className='d-flex justify-content-center align-items-center mt-3'>
+          <GridLoader size={40} margin={8} color={'#1d3ef5ff'} loading={loading} css={override} />
         </div>
       </div>
-      <HashLoader size={70} margin={8} color={'#FFFFFF'} loading={loading} css={override} />
     </>
   )
 };

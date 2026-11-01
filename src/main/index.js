@@ -11,7 +11,7 @@ import path from 'path';
       height: 600,
       minWidth: 600,
       minHeight: 400,
-      backgroundColor: '#5C7CA7',
+      backgroundColor: '#1bc55cff',
       frame: true,
       show: false,
       titleBarStyle: 'hiddenInset',

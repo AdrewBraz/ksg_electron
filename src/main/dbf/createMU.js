@@ -38,7 +38,7 @@ export default (list) => {
     const {
       PATIENT, COD, COD_U, K_U, DS, D_U, C_I, MU_TYPE, IS_PRIM, PROG,
     } = item;
-    return {
+       return {
       PATIENT: `${PATIENT}`,
       DS: !DS ? 'I10' : `${DS}`,
       COD,

@@ -29,7 +29,7 @@ export default (list) =>{
       PATIENT: `${PATIENT}`,
       C_I: `${C_I}`,
       ND,
-      COD_U: COD_U || '32042',
+      COD_U: `${COD_U}` || '32042',
       D_B,
       D_U,
       T_B,

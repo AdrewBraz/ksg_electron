@@ -1,7 +1,7 @@
 import getData from './getData';
 import getVmpData from './getVmpData';
 import rmpData from './rmpData'
-import { vmpReq, kslpStr } from './requestStrings';
+import { vmpReq, emergencyStr, fullStr } from './requestStrings';
 
 
 export default async(db, config, request) => {
@@ -9,5 +9,7 @@ export default async(db, config, request) => {
   const vmp = await getData(db, config, vmpReq);
   const vmpList = await getVmpData(vmp);
   const ksgList = rmpData(ksgData)
-  return {vmpList, ksgList}
+  const emergencyList = await getData(db, config, emergencyStr)
+  const fullList = await getData(db, config, fullStr)
+  return {vmpList, ksgList, emergencyList, fullList}
 }

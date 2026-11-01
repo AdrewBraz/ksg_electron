@@ -1,63 +1,71 @@
-import { getRslt, getIshod } from './xml/utils';
+import { getRslt, getIshod, getPodr } from './xml/utils';
 import { DayCalculation } from './utils/utils.js'
 
-const vHmp = [{
-  GROUP: 42, COD: '200530', VID_HMP: 183, METOD_HMP: 44, MODEL_HMP: 21168, DZP: 0.47, NAME: "баллонная вазодилатация с установкой 1 - 3 стентов в сосуд (сосуды)", NFS: 167220, PRICE: 222471.16  
+const vHmp = [
+   {
+  GROUP: 48,  PRICE: 285490.76, VID_HMP: 545, METOD_HMP: 2634, MODEL_HMP: 22281, DZP: 0.09, NFZ: 270080
 }, {
-  GROUP: 36, COD: '200518', VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21166, DZP: 0.56, NAME: "баллонная вазодилатация с установкой 1 стента в сосуд (сосуды)", NFS: 172649, PRICE: 240617.46  
+  GROUP: 49,  PRICE: 314293.46, VID_HMP: 546, METOD_HMP: 2635, MODEL_HMP: 22281, DZP: 0.08, NFZ: 299122
 }, {
-  GROUP: 37, COD: '200519', VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21166, DZP: 0.49, NAME: "баллонная вазодилатация с установкой 2 стентов в сосуд (сосуды)", NFS: 200591, PRICE: 269688.58  
-}, {
-  GROUP: 38, COD: '200520', VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21166, DZP: 0.43, NAME: "баллонная вазодилатация с установкой 3 стентов в сосуд (сосуды)", NFS: 228440, PRICE: 297495.13
-}, {
-  GROUP: 39, COD: '200522', VID_HMP: 183, METOD_HMP: 47, MODEL_HMP: 21167, DZP: 0.54, NAME: "баллонная вазодилатация с установкой 1 стента в сосуд (сосуды)", NFS: 128489, PRICE: 177265.99
-}, {
-  GROUP: 40, COD: '200523', VID_HMP: 183, METOD_HMP: 46, MODEL_HMP: 21167, DZP: 0.45, NAME: "баллонная вазодилатация с установкой 2 стентов в сосуд (сосуды)", NFS: 156482, PRICE: 205985.08 
-}, {
-  GROUP: 41, COD: '200524', VID_HMP: 183, METOD_HMP: 45, MODEL_HMP: 21167, DZP: 0.34, NAME: "баллонная вазодилатация с установкой 3 стентов в сосуд (сосуды)", NFS: 196645, PRICE: 243647.09
-}, {
-  GROUP: 44, COD: '200409', VID_HMP: 220, METOD_HMP: 1103, MODEL_HMP: 21169, DZP: 0.17, NAME: "имплантация частотноадаптированного однокамерного кардиостимулятора", NFS: 152912, PRICE: 171186.51
-}, {
-  GROUP: 46, COD: '200510', VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.37, NAME: "имплантация частотноадаптированного двухкамерного кардиостимулятора", NFS: 225385, PRICE: 284009.89
-}, {
-  GROUP: 48, COD: '200525', VID_HMP: 184, METOD_HMP: 1072, MODEL_HMP: 21171, DZP: 0.52, NAME: "аортокоронарное шунтирование у больных ишемической болезнью сердца в условиях искусственного кровоснабжения", NFS: 387407, PRICE: 529027.5
+  GROUP: 50,  PRICE: 358040.61, VID_HMP: 547, METOD_HMP: 2636, MODEL_HMP: 22281, DZP: 0.07, NFZ: 342826
+}, 
+{
+  GROUP: 52,  PRICE: 371370.79, VID_HMP: 219, METOD_HMP: 1102, MODEL_HMP: 21170, DZP: 0.42, NFZ: 293277
 },
 {
-  GROUP: 43, COD: '200570', VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24, NAME: "баллонная вазодилятация и/или стентирование с установкой 1-3 стентов в сосуд с применением методов внутрисосудистой визуализации и/или в сочетании с оценкой гемодинамической значимости стеноза по данным физиологической оценки коронарного кровотока (ФРК или МРК) при ишемической болезни сердца", NFS: 330593, PRICE: 386370.65 
+  GROUP: 53,  PRICE: 707620.81, VID_HMP: 184, METOD_HMP: 2637, MODEL_HMP: 21171, DZP: 0.57, NFZ: 519782
+},
+
+{
+  GROUP: 54,   PRICE: 495378.21, VID_HMP: 554, METOD_HMP: 2719, MODEL_HMP: 22282, DZP: 0.21, NFZ: 437173 
 },
 {
-  GROUP: 65, COD: '200065', VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24, NAME: "Создание фенестраций при эндоваскулярном протезировании аорты с сохранением кровотока по ветвям дуги аорты", NFS: 330593, PRICE: 1574111 
+  GROUP: 55,  PRICE: 879863.49, VID_HMP: 139, METOD_HMP: 458, MODEL_HMP: 21402, DZP: 0.13, NFZ: 812867 
+},
+{ GROUP: 56,  PRICE: 1034792.80, VID_HMP: 142, METOD_HMP: 453, MODEL_HMP: 21519, DZP: 0.17, NFZ: 934114
 },
 {
-  GROUP: 66, COD: '200066', VID_HMP: 471, METOD_HMP: 2601, MODEL_HMP: 22207, DZP: 0.24, NAME: "Имплантация фенестрированного стент-графта при эндопротезирование брюш. аорты с сохран. кровотока по висцел. арт.", NFS: 330593, PRICE: 3242579 
+  GROUP: 57,  PRICE: 798394.32, VID_HMP: 467, METOD_HMP: 2594, MODEL_HMP: 22202, DZP: 0.12, NFZ: 741947 
+},
+{ GROUP: 58,  PRICE: 445216.82, VID_HMP: 476, METOD_HMP: 2609, MODEL_HMP: 22215, DZP: 0.14, NFZ: 408921
+},
+{ GROUP: 60,  PRICE: 1794191.48, VID_HMP: 557, METOD_HMP: 2733, MODEL_HMP: 22293, DZP: 0.02, NFZ: 1771726
+},
+{ GROUP: 61,  PRICE: 344509.16, VID_HMP: 558, METOD_HMP: 477, MODEL_HMP: 21170, DZP: 0.12, NFZ: 320152
+
+},
+{ GROUP: 62,  PRICE: 583238.91, VID_HMP: 219, METOD_HMP: 474, MODEL_HMP: 21170, DZP: 0.08, NFZ: 555085
+},
+{ GROUP: 63,  PRICE: 647776.14, VID_HMP: 137, METOD_HMP: 465, MODEL_HMP: 21401, DZP: 0.22, NFZ: 568484
+},
+{ GROUP: 64,  PRICE: 633287.44, VID_HMP: 558, METOD_HMP: 2815, MODEL_HMP: 22343, DZP: 0.06, NFZ: 610080
+},
+{ GROUP: 65,  PRICE: 891468.49, VID_HMP: 605, METOD_HMP: 466, MODEL_HMP: 22339, DZP: 0.04, NFZ: 869420
+},
+{ GROUP: 94,  PRICE: 3242579.00, VID_HMP: 143, METOD_HMP: 2615, MODEL_HMP: 21399, DZP: 0, NFZ: 3242579.00 },
+{ GROUP: 93,  PRICE: 1574111.00, VID_HMP: 143, METOD_HMP: 2614, MODEL_HMP: 21399, DZP: 0, NFZ: 1574111.00
+},
+{ GROUP: 95,  PRICE: 3753856.00, VID_HMP: 138, METOD_HMP: 2675, MODEL_HMP: 21401, DZP: 0, NFZ: 3753856.00
+},
+{ GROUP: 98,  PRICE: 2531665.00, VID_HMP: 577, METOD_HMP: 2765, MODEL_HMP: 22316, DZP: 0, NFZ: 2531665.00
+},
+{ GROUP: 99,  PRICE: 11067399.00, VID_HMP: 578, METOD_HMP: 2676, MODEL_HMP: 22315, DZP: 0, NFZ: 11067399.00
 },
 ];
 
 export default async (data) => {
   const result = data.reduce((acc, item) => {
     const {
-      PATIENT, FIO, C_I, S_POL, SN_POL, DDS, IN_DATE, OUT_DATE, FINAL_CODE, ID, JSON_DATA
+      PATIENT, FIO, C_I, S_POL, SN_POL, DDS, IN_DATE, OUT_DATE, GROUP_CODE, FINAL_CODE, ID, JSON_DATA, VID_HMP, METOD_HMP
     } = item;
-    const obj = vHmp.find((el) => el.COD === (item.COD).toString());
-    const { VID_HMP, METOD_HMP, MODEL_HMP, DZP, GROUP, PRICE, NAME, NFS } = obj;
-    const hmp = vHmp.find((el) => el.GROUP === GROUP);
-    let SNPOLIS; let
-      ENP;
-    if (S_POL || SN_POL.length !== 16) {
-      if (!S_POL) {
-        SNPOLIS = `${SN_POL}`;
-      } else {
-        SNPOLIS = `${S_POL} ${SN_POL}`;
-      }
-    } else {
-      ENP = SN_POL;
-    }
+    const obj = vHmp.find((el) =>( el.GROUP).toString() === GROUP_CODE);
+    const {  PRICE, MODEL_HMP, DZP, NFZ } = obj;
+    const ENP = SN_POL
     const [FAM, IM, OT ] = FIO.split(' ')
     const RSLT = getRslt(FINAL_CODE);
     const ISHOD = getIshod(RSLT);
     acc[C_I] = {
       IDNPR: `${PATIENT}_${ID}`,
-      SNPOLIS,
       FAM,
       IM,
       OT: OT ? OT : '',
@@ -69,12 +77,13 @@ export default async (data) => {
       VIDPOM: 32,
       FOR_POM: 3,
       PROFIL: 81,
-      GR_HMP: GROUP,
+      PROFIL_M: 34,
+      GR_HMP: GROUP_CODE,
       VID_HMP,
       METOD_HMP,
       MODEL_HMP,
+      NFZ,
       DZP,
-      NFZ: NFS,
       RESH_HMP: 1,
       IDCASE: `${PATIENT}_${C_I}`,
       ADR_GAR: '92cbcc75-02b2-4a74-ac33-cc2fcdac25bc',
@@ -86,7 +95,8 @@ export default async (data) => {
       ISHOD,
       IS_PRERV: 0,
       SUMV: PRICE,
-      NAME,
+      OID_FRMO: getPodr(item.PODR),
+      NAME: item.model_name,
       ...item
     };
     return acc;

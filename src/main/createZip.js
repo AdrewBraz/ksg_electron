@@ -8,9 +8,9 @@ export default async (xml) => {
     const date = format(new Date(), 'yyyy-MM-dd');
     await createXml(xml, date);
     const [year, month, day ] = date.split('-')
-    const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_990089_${day}.xml`);
+    const stat = fs.statSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_00892400_${day}.xml`);
     console.log(stat)
-    const add = await zip.addLocalFile(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_990089_${day}.xml`);
+    const add = await zip.addLocalFile(`C:/Users/User/Desktop/Выгрузка ФФОМС/${year}_${month}_00892400_${day}.xml`);
     console.log(add)
     await zip.writeZip(`C:/Users/User/Desktop/Выгрузка ФФОМС/FM990089F00${date}.zip`);
     return true

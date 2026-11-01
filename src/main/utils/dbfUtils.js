@@ -27,15 +27,15 @@ const replaceDoc = (cod) => {
     case '40017':
       return '';
     case '39777':
-      return '32042';
+      return '12655';
     case '39089':
-      return '32042';
+      return '12655';
     case '39301':
-      return '32042';
+      return '12655';
     case '34430':
-      return '32042';
+      return '12655';
     case '36445':
-      return '32042';
+      return '12655';
     case '36467':
       return '21681';
     case '28918':
@@ -54,6 +54,9 @@ const medicalServList = (list, interin) => {
   let ds;
 
   const l1 = list.map((el) => {
+    if(el.C_I === '33772'){
+      console.log(el)
+    }
     const {
       SRV_ID, COD_U, DS, ORG_ID,
     } = el;
@@ -67,7 +70,6 @@ const medicalServList = (list, interin) => {
     };
   }).filter(el => el.COD)
   const l2 = l1.reduce((acc, item) => {
-    console.l
     const { PATIENT, D_U, COD } = item;
     const index = findIndex(acc, { PATIENT, D_U, COD });
     if (index < 0) {
@@ -108,7 +110,7 @@ const getHospList = (list) => {
     console.log(COD, C_I, KIND )
     if(KIND === 'ПОЛОЖЕН'){
       count = 1;
-      const obj = { PATIENT, C_I, ND: count, COD_U, D_B: D_B.addHours(3), D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD: /200+/.test(COD) ? COD : '83010', PROG, TIP: '', D_TYPE: '', MCOD, CODE };
+      const obj = { PATIENT, C_I, ND: count, COD_U, D_B: D_B.addHours(3), D_U: '', T_B: D_TIME, T_U: '', K_U: '', K_UH: 0, DDS, COD:  COD, PROG, TIP: '', D_TYPE: '', MCOD, CODE };
       count = count + 1;
       acc.push(obj)
       return acc
@@ -121,7 +123,6 @@ const getHospList = (list) => {
       acc.push(obj)
       return acc
     } else if(KIND === 'ВЫПИСАН'){
-      console.log(acc)
       acc[acc.length - 1].D_U = D_B.addHours(3);
       acc[acc.length - 1].T_U = D_TIME;
       acc[acc.length - 1].K_U = 0;

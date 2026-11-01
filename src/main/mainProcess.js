@@ -13,28 +13,42 @@ import { ffoms, listOfOmsRequests, servStr, hospStr } from './requestStrings';
 import dbfController from './dbf';
 import dbfCreator from './dbf/dbfCreator.js';
 import pdfCreator from './pdfCreator';
+import startCloudXlsxSync from './cloudXlsxSync';
 import i18n from 'i18n'
+import { format } from 'date-fns'
+import { difference } from 'lodash';
+
+oracledb.initOracleClient()
 
 export default () => {
   i18n.configure({
     locales: ['ru'],
     directory: path.join(__dirname, 'locales')
    })
+
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 oracledb.fetchAsString = [ oracledb.CLOB ];
 const config = {
-  user: 'OK',
-  password: 'novlv',
-  connectString: '172.16.11.23:1521/promis35',
+  user: 'BRA',
+  password: 'brabrobra',
+  connectString: 'hc06.cc.cardio.ru:1521/promis35',
 };
+
+  startCloudXlsxSync({
+    db: oracledb,
+    dbConfig: config,
+  });
 
   ipcMain.handle('ffomsChannel', async (e, id) => {
     const requestString = ffoms[id];
-    const { vmpList, ksgList } = await getPreparedData(oracledb, config, requestString)
+    const { vmpList, ksgList, emergencyList, fullList } = await getPreparedData(oracledb, config, requestString)
+    console.log(vmpList.length, ksgList.length)
+    // console.log(vmpList, ksgList, emergencyList, fullList)
+    const listOfStac =Object.keys(vmpList).concat(Object.keys(ksgList), emergencyList.map(item => item.C_I))
     if( id === 'excel'){
-      if (fs.existsSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx')) {
-        fs.unlinkSync('C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx');
-      }
+      // if (fs.existsSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx`)) {
+      //   fs.unlinkSync(`C:/Users/User/Desktop/Выгрузка ФФОМС/ФФОМС.xlsx`);
+      // }
       const result = await excel(vmpList, ksgList, i18n)
       return result
     }

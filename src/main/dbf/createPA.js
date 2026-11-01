@@ -5,6 +5,27 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
+const vid_type = (type) => {
+  switch(type){
+    case "Пенсионер":
+      return '3'
+    case "Служащий":
+      return "1"
+    case "Безработный":
+      return "5"
+    case "Домохозяйка(ин)":
+      return "5"
+    case "Самозанятый":
+      return "1"
+    case "Рабочий":
+      return "1"
+    case "Военнослужащий":
+      return "2"
+    default:
+      return "1"
+  }
+}
+
 export default (list) => {
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
@@ -16,6 +37,7 @@ export default (list) => {
     { name: 'SNILS', type: 'C', size: 14 },
     { name: 'MCOD', type: 'C', size: 15 },
     { name: 'STAT_Z', type: 'C', size: 2 },
+    { name: 'VZ', type: 'C', size: 2 },
     { name: 'PLACE_W', type: 'C', size: 150 },
     { name: 'PLACE', type: 'C', size: 254 },
     { name: 'PHONE', type: 'C', size: 20 },
@@ -27,7 +49,7 @@ export default (list) => {
 
   const records = list.map((item) => {
     const {
-      PATIENT, FAM, IM, OT, DR, W, SNILS, STAT_Z, PLACE_W, PLACE, PHONE, INVAL, C_OKSM, D_TYPE,
+      PATIENT, FAM, IM, OT, DR, W, SNILS, STAT_Z, STAT_NAME, PLACE_W, PLACE, PHONE, INVAL, C_OKSM, D_TYPE,
     } = item;
     const snilsTemp = SNILS ? (SNILS).replace(/\s/, '').replace(/-/g, '') : null;
     return {
@@ -40,8 +62,9 @@ export default (list) => {
       SNILS: snilsTemp ? `${snilsTemp.slice(0, 3)}-${snilsTemp.slice(3, 6)}-${snilsTemp.slice(6, 9)} ${snilsTemp.slice(9)}` : '',
       MCOD: '4144978_1',
       STAT_Z: STAT_Z ? `${STAT_Z}` : '',
+      VZ: vid_type(STAT_NAME),
       PLACE_W: `${PLACE_W}`,
-      PLACE: PLACE ? `${PLACE}` : 'ГОР. МОСКВА',
+      PLACE: PLACE ? `${PLACE.trim()}` : 'ГОР. МОСКВА',
       PHONE: PHONE ? `${PHONE}` : '',
       INVAL: INVAL ? `${INVAL}` : '',
       C_OKSM: '',
