@@ -15,7 +15,8 @@
     "start": "electron ./dist/main/main.js",
     "build:dev": "webpack --mode development",
     "watch": "webpack --mode development --watch",
-    "test:xml": "node --test tests/rmp.xml.cjs"
+    "test:xml": "node --test tests/rmp.xml.cjs",
+    "prestart": "npm run build"
   },
   "author": "",
   "license": "ISC",
