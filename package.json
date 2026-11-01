@@ -9,10 +9,13 @@
   },
   "scripts": {
     "test": "jest",
-    "build-app": "npx webpack --env production",
+    "build-app": "webpack --mode production",
     "build": "npm run build-app",
     "postinstall": "npm run build",
-    "start": "electron ./dist/main/main.js"
+    "start": "electron ./dist/main/main.js",
+    "build:dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "test:xml": "node --test tests/rmp.xml.cjs"
   },
   "author": "",
   "license": "ISC",

@@ -189,8 +189,11 @@ export default (coll) => {
       ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2, F_CR_PARAM_CODE, JSON_DATA
     } = item;
     console.log(item.KD_Z)
+    const isGroup424 = Number(item.F_KSG_NUM) === 424;
+    const hasMedication = isGroup424 || (F_CR_PARAM_CODE && F_CR_PARAM_CODE.startsWith('gsh'));
+    const secondaryDiagnosis = F_CR_MKB_CODE2 == null ? '' : String(F_CR_MKB_CODE2).trim();
     const isCompletedCase = (Number(item.RSLT) === 201 && Number(item.ISHOD) === 202)
-      || Number(item.F_KSG_NUM) === 258;
+      || Number(item.F_KSG_NUM) === 258 || isGroup424;
     let frag = fragment()
     .ele('N_ZAP').txt(counter.getNext()).up()
     .ele('TYPE').txt('PRIL4').up()
@@ -242,8 +245,8 @@ export default (coll) => {
           .ele('DS_GR').txt(`${item.DS1}`).up()
           .ele('DS1').txt(`${item.DS1}`).up()
 
-    if (F_CR_PARAM_CODE != null) {
-      frag.ele('DS2').txt(`${F_CR_MKB_CODE2 ? F_CR_MKB_CODE2 : ''}`).up();
+    if (secondaryDiagnosis) {
+      frag.ele('DS2').txt(secondaryDiagnosis).up();
     }
     frag = frag.ele('KSG_KPG')
             .ele('N_KSG').txt(`${item.F_MES_CODE}`).up()
@@ -261,15 +264,15 @@ export default (coll) => {
       .up()
 
     root.ele('ZAP').import(frag);
-    if (F_CR_PARAM_CODE && F_CR_PARAM_CODE.slice(0, 3) === 'gsh') {
+    if (hasMedication) {
       const fragUsl = fragment()
         .ele('LEK_PR')
           .ele('DATA_INJ').txt(format(item.DATE_Z_1, 'yyyy-MM-dd')).up()
-          .ele('CODE_SH').txt(`${F_CR_PARAM_CODE}`).up()
-          .ele('REGNUM').txt(`${F_CR_PARAM_CODE === 'gsh011' ? '000079' : '002382'}`).up()
+          .ele('CODE_SH').txt(F_CR_PARAM_CODE || '').up()
+          .ele('REGNUM').txt(isGroup424 ? '03033' : (F_CR_PARAM_CODE === 'gsh011' ? '000079' : '002382')).up()
           .ele('LEK_DOSE')
             .ele('ED_IZM').txt(`10`).up()
-            .ele('DOSE_INJ').txt(F_CR_PARAM_CODE === 'gsh011' ? 300 : 140).up()
+            .ele('DOSE_INJ').txt(isGroup424 ? 284 : (F_CR_PARAM_CODE === 'gsh011' ? 300 : 140)).up()
             .ele('METHOD_INJ').txt('7').up()
             .ele('COL_INJ').txt('1').up()
             .up()
@@ -304,11 +307,9 @@ export default (coll) => {
           .ele('IDSL').txt(`${IDSL}`).up()
           .ele('Z_SL').txt(F_C_KSLP).up()
         .up();
-      if (F_CR_SERVICE_CODE) {
-        root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
-      } else if(F_CR_PARAM_CODE) {
-        root.last().last().last().prev().last().prev().prev().prev().prev().import(fragKSLP);
-      } else root.last().last().last().prev().last().prev().prev().import(fragKSLP);
+      const sl = root.last().last().last().prev();
+      const ksg = sl.find(node => node.node.nodeName === 'KSG_KPG');
+      ksg.import(fragKSLP);
     }
     if (ENP) {
       const fragPol = fragment()

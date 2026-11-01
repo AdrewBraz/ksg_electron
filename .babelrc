@@ -1,16 +1,38 @@
 {
-    "presets": [
+  "presets": [
+    [
       "@babel/preset-env",
-      "@babel/preset-react"
+      {
+        "targets": {
+          "electron": "38"
+        },
+        "modules": false,
+        "loose": true
+      }
     ],
-    "plugins": [
-      ["@babel/plugin-proposal-decorators", { "legacy": true }],
-      ["@babel/plugin-proposal-class-properties", { "loose" : true }],
-      ["@babel/plugin-transform-runtime",
-        {
-          "regenerator": true
-        }
-      ],
-      ["@emotion"]
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ],
+    [
+      "@emotion"
     ]
-  }
+  ]
+}
