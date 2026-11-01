@@ -189,7 +189,9 @@ export default (coll) => {
       ENP, SNPOLIS, F_CR_SERVICE_CODE, SL_K, F_C_KSLP, F_CR_MKB_CODE2, F_CR_PARAM_CODE, JSON_DATA
     } = item;
     console.log(item.KD_Z)
-    const frag = fragment()
+    const isCompletedCase = (Number(item.RSLT) === 201 && Number(item.ISHOD) === 202)
+      || Number(item.F_KSG_NUM) === 258;
+    let frag = fragment()
     .ele('N_ZAP').txt(counter.getNext()).up()
     .ele('TYPE').txt('PRIL4').up()
     .ele('PACIENT').up()
@@ -221,9 +223,9 @@ export default (coll) => {
         .ele('KD_Z').txt(item.KD_Z).up()
         .ele('RSLT').txt(`${item.RSLT}`).up()
         .ele('ISHOD').txt(`${item.ISHOD}`).up()
-        .ele('IS_PRERV').txt(`${item.IS_PRERV}`).up()
+        .ele('IS_PRERV').txt(`${isCompletedCase ? 0 : item.IS_PRERV}`).up()
         .ele('KOEF_PRERV').txt(`${item.KOEF_PRERV}`).up()
-        .ele('PR_PR').txt(`${item.PR_PR}`).up()
+        .ele('PR_PR').txt(isCompletedCase ? '' : `${item.PR_PR}`).up()
         .ele('KOEF_PRIV').txt(`${item.KOEF_PRIV}`).up()
         .ele('KOEF_SPEC').txt(`${item.KOEF_SPEC}`).up()
         .ele('KOEF_D').txt(`1.634`).up()
@@ -239,8 +241,11 @@ export default (coll) => {
           .ele('NHISTORY').txt(`${item.C_I}`).up()
           .ele('DS_GR').txt(`${item.DS1}`).up()
           .ele('DS1').txt(`${item.DS1}`).up()
-          .ele('DS2').txt(`${F_CR_MKB_CODE2 ? F_CR_MKB_CODE2 : ''}`).up()
-          .ele('KSG_KPG')
+
+    if (F_CR_PARAM_CODE != null) {
+      frag.ele('DS2').txt(`${F_CR_MKB_CODE2 ? F_CR_MKB_CODE2 : ''}`).up();
+    }
+    frag = frag.ele('KSG_KPG')
             .ele('N_KSG').txt(`${item.F_MES_CODE}`).up()
             .ele('GR').txt(`${item.F_KSG_NUM}`).up()
             .ele('VER_KSG').txt(`${item.VER_KSG}`).up()
