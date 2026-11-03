@@ -16,7 +16,7 @@ export default (list) => {
   ];
   const records = list.map((item) => {
     const {
-      PATIENT, S_POL, SN_POL, C_T, Q_OGRN, DATE_EN, DATE_E, POL_S, QD_NAME,
+      PATIENT, S_POL, SN_POL, C_T, Q_OGRN, DATE_N, DATE_E, POL_S, QD_NAME,
     } = item;
     let OGRN;
     if (QD_NAME === 'ИКАР') {
@@ -39,9 +39,9 @@ export default (list) => {
       SN_POL,
       C_T: C_T || '77',
       Q_OGRN: OGRN,
-      T_POL: SN_POL.length === 16 ? '5' : '1',
+      T_POL: item.T_POL || (SN_POL.length === 16 ? '5' : '1'),
       QD_NAME: QD_NAME || 'РЕЗЕРВНАЯ СТРАХОВАЯ КОМПАНИЯ',
-      DATE_EN,
+      DATE_N,
       DATE_E: dateExp,
       POL_S,
       CHD: new Date(),

@@ -12,6 +12,7 @@ import createZip from './createZip'
 import { ffoms, listOfOmsRequests, servStr, hospStr } from './requestStrings';
 import dbfController from './dbf';
 import dbfCreator from './dbf/dbfCreator.js';
+import { service1974Query, validate1974Links } from './dbf/service1974';
 import pdfCreator from './pdfCreator';
 import startCloudXlsxSync from './cloudXlsxSync';
 import i18n from 'i18n'
@@ -78,21 +79,29 @@ const config = {
     }
   })
 
-  ipcMain.handle('megaChannel', async(e, id) => {
-    const files = fs.readdirSync('C:/Users/User/Desktop/Мегаклиника');
-    files.forEach((item) => {
-      const name = item.slice(-3);
-        if (name === 'dbf') {
-          fs.unlinkSync(`C:/Users/User/Desktop/Мегаклиника/${item}`);
-        }
-    });
-      const obj = {};
-    for (const item of listOfOmsRequests) {
-      const result = await getData(oracledb, config, item.req);
-      const [name, descriptors, records] = dbfController[item.name](result);
-       await dbfCreator(name, descriptors, records)
+  let currentExport;
+  async function exportMega() {
+    const connection = await oracledb.getConnection(config);
+    const tables = {};
+    let services;
+    try {
+      await connection.execute('set transaction read only');
+      services = (await connection.execute(service1974Query)).rows;
+      for (const { name, req } of listOfOmsRequests) {
+        tables[name] = (await connection.execute(req)).rows;
+      }
+    } finally {
+      await connection.close();
     }
-
-      return 'success';
+    validate1974Links(services, tables);
+    const files = listOfOmsRequests.map(({ name }) => name === 'MU'
+      ? dbfController.MU(tables.MU, services)
+      : dbfController[name](tables[name]));
+    await dbfCreator('C:/Users/User/Desktop/Мегаклиника', files);
+    return 'success';
+  }
+  ipcMain.handle('megaChannel', () => {
+    if (!currentExport) currentExport = exportMega().finally(() => { currentExport = null; });
+    return currentExport;
   })
 }

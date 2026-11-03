@@ -7,8 +7,11 @@ Date.prototype.addHours = function (h) {
   return this;
 };
 
-export default (list) => {
-  const result = medicalServList(list, Interin)
+export default (list, services1974 = []) => {
+  const regular = medicalServList(list, Interin).filter(row => row.COD !== '1974');
+  const result = regular.concat(services1974.map(service => ({
+    ...service, COD: '1974', K_U: 1, MU_TYPE: '1', IS_PRIM: '1', PROG: 'ОМСМК',
+  })));
   const fieldDescriptors = [
     { name: 'PATIENT', type: 'C', size: 36 },
     { name: 'COD_U', type: 'C', size: 36 },
@@ -45,7 +48,7 @@ export default (list) => {
       COD_U: COD_U ? COD_U : '32042',
       K_U,
       P_U: '1',
-      D_U: D_U.addHours(4),
+      D_U: COD === '1974' ? new Date(item.SERVICE_DAY) : D_U.addHours(4),
       ISHOD: '1',
       RSLT: '2',
       CH_N: '1',

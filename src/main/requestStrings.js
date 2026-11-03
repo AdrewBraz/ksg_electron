@@ -243,7 +243,8 @@ from bra.oms_pat_mk mk
 inner join oms_pat_pol pol on mk.patient = pol.patient
 left join bra.smp_num smp on mk.med_id = smp.med_id 
 left join a.t_smh_plans tal on smp.med_id = tal.t_med_chrt_id`;
-const amb = `select * from st.oms_pat_srv_1 srv inner join oms_pat_pol pol on srv.patient = pol.patient`;
+const amb = `select srv.* from st.oms_pat_srv_1 srv
+where exists (select 1 from oms_pat_pol pol where pol.patient = srv.patient)`;
 const move = `select distinct move.fio_pat, move.patient, move.c_i, move.org_type, move.org_pat, move.cod_u, move.fio_sot, to_date(move.d_b, 'dd.mm.yy') d_b, to_char(move.d_b, 'HH24:MI') d_time, move.kind, move.dds, move.cod, move.prog, move.tip, move.d_type, move.mcod, move.code, move.result, move.h_pays, move.h_date 
 from oms_pat_move move
 inner join st.ksg_list list on list.patient = move.patient
@@ -276,11 +277,11 @@ export const fullStr = 'select c_i from voms_st'
 export const emergencyStr = `select * from st.ksg_list_v where channel like 'Городская скорая помощь'`
 
 export const listOfOmsRequests = [
-  // { name: 'PO', req: pol },
-  // { name: 'AD', req: adr },
-  // { name: 'PA', req: pat },
-  // { name: 'DU', req: doc },
-  // { name: 'MU', req: amb },
+  { name: 'PO', req: pol },
+  { name: 'AD', req: adr },
+  { name: 'PA', req: pat },
+  { name: 'DU', req: doc },
+  { name: 'MU', req: amb },
   { name: 'MB', req: history },
   { name: 'AP', req: talons },
   { name: 'DV', req: move}

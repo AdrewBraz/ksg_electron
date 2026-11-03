@@ -46,6 +46,7 @@ const paths = {
 const Report = () => {
   console.log(window.api)
   let [loading, setLoading] = useState(false);
+  const [reportError, setReportError] = useState('');
     const override = css`
       display: block;
       margin: 10rem auto;
@@ -56,12 +57,12 @@ const Report = () => {
       const { func } = paths[path]
       try {
         setLoading(true)
-        await func().then(() => {
-          setLoading(false)
-          return 'success';
-        }).then(() => console.log('success'));
+        setReportError('');
+        await func();
       } catch (e) {
-        throw new Error('Something went wrong');
+        setReportError(e.message);
+      } finally {
+        setLoading(false);
       }
     };
     const renderButton = (path, text, icon, isDisabled) => (
@@ -95,6 +96,7 @@ const Report = () => {
   return (
     <>
       <div>
+        {reportError && <p role="alert">{reportError}</p>}
         <div className="input-group flex-row justify-content-around w-100 mt-3">
           {Object.keys(paths).map((item) => {
             const { path, text, icon, type, isDisabled} = paths[item];

@@ -43,9 +43,9 @@ export default (list) => {
       PROG,
       TRAVMA: '',
       DS_P,
-      DS: DS_P,
-      DS_S: '',
-      DS_0: '',
+      DS: item.DS || DS_P,
+      DS_S: item.DS_S || '',
+      DS_O: item.DS_O || '',
       VMPAP_ID: VMPAP_ID ? VMPAP_ID : '',
       CHD: new Date(),
     };

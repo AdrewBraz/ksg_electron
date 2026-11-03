@@ -54,9 +54,6 @@ const medicalServList = (list, interin) => {
   let ds;
 
   const l1 = list.map((el) => {
-    if(el.C_I === '33772'){
-      console.log(el)
-    }
     const {
       SRV_ID, COD_U, DS, ORG_ID,
     } = el;
